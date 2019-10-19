@@ -7,6 +7,9 @@ apply plugin: 'kotlin-android-extensions'
 // JUnit 5 plugin
 apply plugin: 'de.mannodermaus.android-junit5'
 
+// Kotlin Annotation processor
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
@@ -50,11 +53,17 @@ dependencies {
     // App dependencies //
     /////////////////////
     implementation "androidx.appcompat:appcompat:$appCompatVersion" // Support for the Action Bar user interface design pattern. This library includes support for material design user interface implementations.
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation "androidx.room:room-runtime:$roomVersion" // sqllite wrapper
+    kapt "androidx.room:room-compiler:$roomVersion" // annotation processor for room
 
     ///////////////////////////////
     // Architecture dependencies //
     //////////////////////////////
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion" // ConstraintLayout for Android
+    implementation "androidx.room:room-runtime:$roomVersion" // sqllite wrapper
+    kapt "androidx.room:room-compiler:$roomVersion" // annotation processor for room
+    implementation "androidx.room:room-ktx:$roomVersion" // Kotlin Extensions and Coroutines support for Room
 
     ///////////////////////////////////////
     // Dependencies for local unit tests //
