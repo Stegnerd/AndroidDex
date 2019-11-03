@@ -29,6 +29,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    // Sets the runtime of java to 8
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -53,9 +58,11 @@ dependencies {
     // App dependencies //
     /////////////////////
     implementation "androidx.appcompat:appcompat:$appCompatVersion" // Support for the Action Bar user interface design pattern. This library includes support for material design user interface implementations.
-    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion" // Provides Dispatchers.Main context for Android applications
+    implementation "com.google.code.gson:gson:$gsonVersion" // JSON library from google
     implementation "androidx.room:room-runtime:$roomVersion" // sqllite wrapper
     kapt "androidx.room:room-compiler:$roomVersion" // annotation processor for room
+    implementation "androidx.work:work-runtime-ktx:$workVersion" // WorkManager API to schedule deferrable, asynchronous tasks that must be run reliably
 
     ///////////////////////////////
     // Architecture dependencies //
@@ -68,6 +75,8 @@ dependencies {
     ///////////////////////////////////////
     // Dependencies for local unit tests //
     ///////////////////////////////////////
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
     // (required)
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion" // JUnit Jupiter API for writing tests.
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion" // JUnit Jupiter test engine implementation, only required at runtime.
@@ -78,9 +87,11 @@ dependencies {
     // Dependencies for Android unit tests - Instrumented testing //
     ////////////////////////////////////////////////////////////////
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion" //Contains core and basic View matchers, actions, and assertions. See Basics and Recipes
+    androidTestImplementation "androidx.work:work-testing:$workVersion" // Testing library provides a way to manually initialize WorkManager for tests
     // Jupiter API & Test Runner, if you don't have it already
     androidTestImplementation "androidx.test:runner:$androidxTestRunnerVersion"
-    androidTestImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+    androidTestImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion" // JUnit Jupiter API for writing tests.
     // Instrumentation test companion libraries for junit 5
     androidTestImplementation "de.mannodermaus.junit5:android-test-core:$mannodermausJunitVersion"
     androidTestRuntimeOnly "de.mannodermaus.junit5:android-test-runner:$mannodermausJunitVersion"
@@ -89,4 +100,15 @@ dependencies {
     // Kotlin //
     ///////////
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    ////////////
+    // Dagger //
+    ///////////
+    implementation "com.google.dagger:dagger:$daggerVersion" // A fast dependency injector for Android and Java
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion" // Tools to generate Dagger injection and module adapters from annotated code and validate them
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion" // Support libraries for android/dagger
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion" // Annotation processor for dagger
+    // Using dagger for tests as well
+    kaptAndroidTest "com.google.dagger:dagger-compile:$daggerVersion"
+    kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
 }

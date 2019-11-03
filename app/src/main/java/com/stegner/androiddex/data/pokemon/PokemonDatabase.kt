@@ -1,8 +1,9 @@
-package com.stegner.androiddex.data
+package com.stegner.androiddex.data.pokemon
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.stegner.androiddex.data.Converters
 
 /**
  * Pokemon database for the app
