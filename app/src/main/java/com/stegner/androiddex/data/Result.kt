@@ -40,7 +40,7 @@ sealed class Result<out R> {
     /**
      *  Bad Result when there has been an exception.
      */
-    data class Error(val excpetion: Exception) : Result<Nothing>()
+    data class Error(val exception: Exception) : Result<Nothing>()
 
     /**
      * no data has been retrieved yet, "Variables do not exist yet"
@@ -51,7 +51,7 @@ sealed class Result<out R> {
         return when (this) {
             // * is wildcard for Success<T> but since we do not know the type at that time we play it safe with *
             is Success<*> -> "Success[Data=$data]"
-            is Error -> "Error[exception=$excpetion]"
+            is Error -> "Error[exception=$exception]"
             Loading -> "Loading"
         }
     }

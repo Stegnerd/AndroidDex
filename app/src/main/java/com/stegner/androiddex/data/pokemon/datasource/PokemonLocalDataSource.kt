@@ -9,6 +9,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+/**
+ * Concrete implementation of a data source as a db
+ */
 class PokemonLocalDataSource internal constructor(private val pokemonDao: PokemonDao, private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : PokemonDataSource {
 
 
