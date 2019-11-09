@@ -1,4 +1,4 @@
-package com.stegner.androiddex.data
+package com.stegner.androiddex.data.pokemon
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
