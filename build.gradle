@@ -41,9 +41,11 @@ ext {
     coroutinesVersion = '1.2.1'
     daggerVersion = '2.23.2'
     espressoVersion = '3.2.0'
+    fragmentKtxVersion = '1.2.0-rc02'
     gsonVersion = '2.8.6'
     junitVersion = '5.5.2'
     mannodermausJunitVersion = '1.1.0'
     roomVersion = '2.2.1'
+    timberVersion = '4.7.1'
     workVersion = '2.2.0'
 }

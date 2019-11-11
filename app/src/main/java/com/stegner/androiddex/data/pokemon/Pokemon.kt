@@ -3,6 +3,7 @@ package com.stegner.androiddex.data.pokemon
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -15,8 +16,13 @@ import com.google.gson.annotations.SerializedName
  */
 @Entity(tableName = "Pokemon")
 data class Pokemon constructor(
+
+    @PrimaryKey
     @ColumnInfo(name = "pokedex_number")
     val id: Int,
+
+    @ColumnInfo(name = "generation")
+    val generation: Int,
 
     @Embedded
     @SerializedName("name")

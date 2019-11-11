@@ -43,6 +43,12 @@ interface PokemonDao {
     suspend fun getPokemonByType(typeOne: String, typeTwo: String): List<Pokemon>?
 
     /**
+     * Select a list of pokemon based on the generation it is from
+     */
+    @Query("SELECT * FROM pokemon WHERE generation = :gen")
+    suspend fun getPokemonByGeneration(gen: Int): List<Pokemon>?
+
+    /**
      * Seeds the database with all pokemon
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -25,7 +25,7 @@ interface PokemonRepository {
      *
      * @param type The type of pokemon to filter by
      */
-    suspend fun getPokemon(type: String): Result<List<Pokemon>>
+    suspend fun getPokemonByType(type: String): Result<List<Pokemon>>
 
     /**
      * Gets a list of [Pokemon] of a specific type combination
@@ -33,5 +33,12 @@ interface PokemonRepository {
      * @param typeOne The first type to filter by
      * @param typeTwo The second type to filter by
      */
-    suspend fun getPokemon(typeOne:String, typeTwo: String): Result<List<Pokemon>>
+    suspend fun getPokemonByTypes(typeOne: String, typeTwo: String): Result<List<Pokemon>>
+
+    /**
+     *  Gets a list of [Pokemon] of a specific generation
+     *
+     *  @param generation The generation og pokemon to retrieve
+     */
+    suspend fun getPokemonByGeneration(generation: Int): Result<List<Pokemon>>
 }
