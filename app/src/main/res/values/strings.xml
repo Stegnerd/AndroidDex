@@ -1,5 +1,26 @@
 <resources>
     <string name="app_name">AndroidDex</string>
 
+    <!-- Error -->
+    <string name="loading_pokemon_error">Error while loading pokemon</string>
 
+    <!-- Filters -->
+    <string name="label_all">All</string>
+    <string name="label_kanto">Kanto</string>
+    <string name="label_jhoto">Jhoto</string>
+    <string name="label_hoenn">Hoenn</string>
+    <string name="label_sinnoh">Sinnoh</string>
+    <string name="label_unova">Unova</string>
+    <string name="label_kalos">Kalos</string>
+    <string name="label_alola">Alola</string>
+    <string name="label_galar">Galar</string>
+
+    <!-- Accessibility -->
+    <string name="logo_image_name">PokeBall</string>
+    <string name="menu_image_pokedex">Pokedex</string>
+
+
+    <!-- Menu Items -->
+    <!-- Drawer Menu-->
+    <string name="menu_drawer_pokedex">Pokedex</string>
 </resources>

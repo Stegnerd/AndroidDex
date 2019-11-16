@@ -58,11 +58,13 @@ dependencies {
     // App dependencies //
     /////////////////////
     implementation "androidx.appcompat:appcompat:$appCompatVersion" // Support for the Action Bar user interface design pattern. This library includes support for material design user interface implementations.
+    implementation "androidx.cardview:cardview:$cardViewVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion" // Provides Dispatchers.Main context for Android applications
     implementation "com.google.code.gson:gson:$gsonVersion" // JSON library from google
+    implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion" // Allows use of recyclerView in layouts
     implementation "androidx.room:room-runtime:$roomVersion" // sqllite wrapper
     kapt "androidx.room:room-compiler:$roomVersion" // annotation processor for room
-    implementation "com.jakewharton.timber:timber:$timberVersion"
+    implementation "com.jakewharton.timber:timber:$timberVersion" // Logging/ Debugging library
     implementation "androidx.work:work-runtime-ktx:$workVersion" // WorkManager API to schedule deferrable, asynchronous tasks that must be run reliably
 
     ///////////////////////////////
@@ -71,6 +73,8 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion" // ConstraintLayout for Android
     implementation "androidx.room:room-runtime:$roomVersion" // sqllite wrapper
     kapt "androidx.room:room-compiler:$roomVersion" // annotation processor for room
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion" // Builds upon navigation-runtime and provides out-of-the-box support for fragments as destination
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion" // allows you to easily add navigation drawers, menus and bottom navigation to your app consistent with the Material Design guidelines
     implementation "androidx.room:room-ktx:$roomVersion" // Kotlin Extensions and Coroutines support for Room
 
     ///////////////////////////////////////
@@ -96,6 +100,13 @@ dependencies {
     // Instrumentation test companion libraries for junit 5
     androidTestImplementation "de.mannodermaus.junit5:android-test-core:$mannodermausJunitVersion"
     androidTestRuntimeOnly "de.mannodermaus.junit5:android-test-runner:$mannodermausJunitVersion"
+
+    ////////////////////////////////////////////////////////////////////////
+    // Resolve conflicts between main and test apk - MIGHT NOT NEED THIS //
+    //////////////////////////////////////////////////////////////////////
+    // more testing to see if needed when we get to the unit test portion of the project
+    //androidTestImplementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
+    //androidTestImplementation "androidx.cardview:cardview:$cardViewVersion"
 
     ////////////
     // Kotlin //

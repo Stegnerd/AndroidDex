@@ -30,7 +30,12 @@ import javax.inject.Singleton
  * where as modules are the vegetables for the recipe
  */
 @Singleton
-@Component(modules = [AndroidSupportInjectionModule::class])
+@Component(
+    modules = [
+        ApplicationModule::class,
+        AndroidSupportInjectionModule::class,
+        PokemonListModule::class
+    ])
 interface ApplicationComponent : AndroidInjector<AndroidDexApplication> {
 
     @Component.Factory

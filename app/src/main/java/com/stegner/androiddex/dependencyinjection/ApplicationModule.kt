@@ -27,7 +27,8 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
  * @Module - provides dependencies for the component
  * @Qualifier - marker on a class so that when it is encountered it is known which one to use,
  *              helpful when two things inherit from the same parent
- * @Retention - This meta-annotation determines whether an annotation is stored in binary output and visible for reflection, in this case yes
+ * @Retention - A tag that stays forever with the programming element even after compiled, and it is visible via reflection, in this case yes
+ *
  * @Singleton - only one instance is shared among the application
  * @JvmStatic - creates an instance of the companion method for java classes to use it. that way it can be referenced the same
  *              way as a kotlin function
