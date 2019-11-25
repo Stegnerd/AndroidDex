@@ -17,6 +17,7 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import timber.log.Timber
 import javax.inject.Qualifier
 import javax.inject.Singleton
 import kotlin.annotation.AnnotationRetention.RUNTIME
@@ -57,6 +58,9 @@ object ApplicationModule {
     @Singleton
     @Provides
     fun provideDatabase(context: Context): PokemonDatabase {
+
+        Timber.w("ABOUT TO START SEEDING DATABASE")
+
         return Room.databaseBuilder(context.applicationContext, PokemonDatabase::class.java, "Pokemon.db")
             .addCallback(object: RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {

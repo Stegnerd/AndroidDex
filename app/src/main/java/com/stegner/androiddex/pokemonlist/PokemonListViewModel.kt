@@ -1,11 +1,9 @@
 package com.stegner.androiddex.pokemonlist
 
+import android.graphics.drawable.AdaptiveIconDrawable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.stegner.androiddex.R
 import com.stegner.androiddex.data.Result
 import com.stegner.androiddex.data.Result.Success
@@ -13,6 +11,7 @@ import com.stegner.androiddex.data.pokemon.Pokemon
 import com.stegner.androiddex.data.pokemon.repository.PokemonRepository
 import com.stegner.androiddex.util.Event
 import com.stegner.androiddex.util.GenerationFilterType
+import com.stegner.androiddex.util.TypeFilter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,6 +29,17 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
     private val _currentGenerationFilteringLabel = MutableLiveData<Int>()
     val currentGenerationFilteringLabel : LiveData<Int> = _currentGenerationFilteringLabel
 
+    private val _currentTypeFilteringLabel = MutableLiveData<Int>()
+    val currentTypeFilteringLabel : LiveData<Int> = _currentTypeFilteringLabel
+
+    // Determines the id of the string to show when no pokemon are available
+    private val _noPokemonLabel= MutableLiveData<Int>()
+    val noPokemonLabel: LiveData<Int> = _noPokemonLabel
+
+    // Determines the id of the image to show when no pokemon are available
+    private val _noPokemonIconRes = MutableLiveData<Int>()
+    val noPokemonIconRes: LiveData<Int> = _noPokemonIconRes
+
     // Determines the id of the icon representing the filter in the ui, ex: [1]
     private val _filterIconRes = MutableLiveData<Int>()
     val filterIconRes : LiveData<Int> = _filterIconRes
@@ -38,11 +48,20 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
     private val _snackbarText = MutableLiveData<Event<Int>>()
     val snackbarMessage: LiveData<Event<Int>> = _snackbarText
 
-    // Determines the filter on the list of _items
-    private var _cuurentGenerationFiltering = GenerationFilterType.ALL
+    // Determines the filter based on generation on the list of _items
+    private var _curentGenerationFiltering = GenerationFilterType.ALL
+
+    // Determines the filter based on type on the list of _items
+    private var _currentTypeFiltering = TypeFilter.All
+
+    // used by the layout to determine when the list of items is empty
+    val empty: LiveData<Boolean> = Transformations.map(_items){
+        it.isEmpty()
+    }
 
     init {
-        setFiltering(GenerationFilterType.ALL)
+        setGenerationFiltering(GenerationFilterType.ALL)
+        setTypeFiltering(TypeFilter.All)
         loadPokemon()
     }
 
@@ -59,36 +78,36 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
      * [GenerationFilterType.SINNOH], [GenerationFilterType.UNOVA], [GenerationFilterType.KALOS]
      * [GenerationFilterType.ALOLA], [GenerationFilterType.GALAR]
      */
-    fun setFiltering(filter: GenerationFilterType){
-        _cuurentGenerationFiltering = filter
+    fun setGenerationFiltering(filter: GenerationFilterType){
+        _curentGenerationFiltering = filter
 
         when(filter){
             GenerationFilterType.ALL -> {
-                setFilter(R.string.label_all, R.drawable.ic_clear_filter_black_24dp)
+                setGenerationFilter(R.string.label_all, R.drawable.ic_clear_filter_black_24dp)
             }
             GenerationFilterType.KANTO -> {
-                setFilter(R.string.label_kanto, R.drawable.ic_filter_1_black_24dp)
+                setGenerationFilter(R.string.label_kanto, R.drawable.ic_filter_1_black_24dp)
             }
             GenerationFilterType.JHOTO -> {
-                setFilter(R.string.label_jhoto, R.drawable.ic_filter_2_black_24dp)
+                setGenerationFilter(R.string.label_jhoto, R.drawable.ic_filter_2_black_24dp)
             }
             GenerationFilterType.HOENN -> {
-                setFilter(R.string.label_hoenn, R.drawable.ic_filter_3_black_24dp)
+                setGenerationFilter(R.string.label_hoenn, R.drawable.ic_filter_3_black_24dp)
             }
             GenerationFilterType.SINNOH -> {
-                setFilter(R.string.label_sinnoh, R.drawable.ic_filter_4_black_24dp)
+                setGenerationFilter(R.string.label_sinnoh, R.drawable.ic_filter_4_black_24dp)
             }
             GenerationFilterType.UNOVA -> {
-                setFilter(R.string.label_unova, R.drawable.ic_filter_5_black_24dp)
+                setGenerationFilter(R.string.label_unova, R.drawable.ic_filter_5_black_24dp)
             }
             GenerationFilterType.KALOS -> {
-                setFilter(R.string.label_kalos, R.drawable.ic_filter_6_black_24dp)
+                setGenerationFilter(R.string.label_kalos, R.drawable.ic_filter_6_black_24dp)
             }
             GenerationFilterType.ALOLA -> {
-                setFilter(R.string.label_alola, R.drawable.ic_filter_7_black_24dp)
+                setGenerationFilter(R.string.label_alola, R.drawable.ic_filter_7_black_24dp)
             }
             GenerationFilterType.GALAR -> {
-                setFilter(R.string.label_galar, R.drawable.ic_filter_8_black_24dp)
+                setGenerationFilter(R.string.label_galar, R.drawable.ic_filter_8_black_24dp)
             }
         }
     }
@@ -96,9 +115,79 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
     /**
      * Used to set mutable live data values for filters based on click events from the ui
      */
-    private fun setFilter(@StringRes filteringLabelString: Int, @DrawableRes filteringIconDrawable: Int){
+    private fun setGenerationFilter(@StringRes filteringLabelString: Int, @DrawableRes filteringIconDrawable: Int){
         _currentGenerationFilteringLabel.value = filteringLabelString
         _filterIconRes.value = filteringIconDrawable
+    }
+
+    fun setTypeFiltering(filter: TypeFilter){
+        _currentTypeFiltering = filter
+
+        when(filter){
+            TypeFilter.All -> {
+                setTypeFilter(R.string.label_all)
+            }
+            TypeFilter.Bug -> {
+                setTypeFilter(R.string.label_type_bug)
+            }
+            TypeFilter.Dark -> {
+                setTypeFilter(R.string.label_type_dark)
+            }
+            TypeFilter.Dragon -> {
+                setTypeFilter(R.string.label_type_dragon)
+            }
+            TypeFilter.Electric -> {
+                setTypeFilter(R.string.label_type_electric)
+            }
+            TypeFilter.Fairy -> {
+                setTypeFilter(R.string.label_type_fairy)
+            }
+            TypeFilter.Fighting -> {
+                setTypeFilter(R.string.label_type_fighting)
+            }
+            TypeFilter.Fire -> {
+                setTypeFilter(R.string.label_type_fire)
+            }
+            TypeFilter.Flying -> {
+                setTypeFilter(R.string.label_type_flying)
+            }
+            TypeFilter.Ghost -> {
+                setTypeFilter(R.string.label_type_ghost)
+            }
+            TypeFilter.Grass -> {
+                setTypeFilter(R.string.label_type_grass)
+            }
+            TypeFilter.Ground -> {
+                setTypeFilter(R.string.label_type_ground)
+            }
+            TypeFilter.Ice -> {
+                setTypeFilter(R.string.label_type_ice)
+            }
+            TypeFilter.Normal -> {
+                setTypeFilter(R.string.label_type_normal)
+            }
+            TypeFilter.Poison -> {
+                setTypeFilter(R.string.label_type_poison)
+            }
+            TypeFilter.Psychic -> {
+                setTypeFilter(R.string.label_type_psychic)
+            }
+            TypeFilter.Rock -> {
+                setTypeFilter(R.string.label_type_rock)
+            }
+            TypeFilter.Steel -> {
+                setTypeFilter(R.string.label_type_steel)
+            }
+            TypeFilter.Water -> {
+                setTypeFilter(R.string.label_type_water)
+            }
+        }
+    }
+
+    private fun setTypeFilter(@StringRes filteringLabelString: Int){
+        _currentTypeFilteringLabel.value = filteringLabelString
+        _noPokemonLabel.value = R.string.label_all_no_pokemon
+        _noPokemonIconRes.value = R.drawable.ic_gotcha
     }
 
     /**
@@ -106,7 +195,7 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
      */
     fun loadPokemon() {
 
-        // This is the coroutin scope for the viewmodel async methods
+        // This is the coroutine scope for the viewmodel async methods
         viewModelScope.launch {
             // all pokemon from  the repository
             val pokemonResult = pokemonRepository.getPokemon()
@@ -114,40 +203,13 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
             if(pokemonResult is Success){
                 val pokemon = pokemonResult.data
 
-                val pokemonToShow = ArrayList<Pokemon>()
+                // filter all pokemon according to the generation
+                val generationFilteredList = pokemon.filter { it.generation == _curentGenerationFiltering.generation }
 
-                // filter all the pokemon based on the drop down filter from the ui
-                for (poke in pokemon){
-                    when(_cuurentGenerationFiltering){
-                        GenerationFilterType.ALL -> pokemonToShow.add(poke)
-                        GenerationFilterType.KANTO -> if(poke.generation == GenerationFilterType.KANTO.generation){
-                            pokemonToShow.add(poke)
-                        }
-                        GenerationFilterType.JHOTO -> if(poke.generation == GenerationFilterType.JHOTO.generation){
-                            pokemonToShow.add(poke)
-                        }
-                        GenerationFilterType.HOENN -> if(poke.generation == GenerationFilterType.HOENN.generation){
-                            pokemonToShow.add(poke)
-                        }
-                        GenerationFilterType.SINNOH -> if(poke.generation == GenerationFilterType.SINNOH.generation){
-                            pokemonToShow.add(poke)
-                        }
-                        GenerationFilterType.UNOVA -> if(poke.generation == GenerationFilterType.UNOVA.generation){
-                            pokemonToShow.add(poke)
-                        }
-                        GenerationFilterType.KALOS -> if(poke.generation == GenerationFilterType.KALOS.generation){
-                            pokemonToShow.add(poke)
-                        }
-                        GenerationFilterType.ALOLA -> if(poke.generation == GenerationFilterType.ALOLA.generation){
-                            pokemonToShow.add(poke)
-                        }
-                        GenerationFilterType.GALAR -> if(poke.generation == GenerationFilterType.GALAR.generation){
-                            pokemonToShow.add(poke)
-                        }
-                    }
-                }
+                // filter the generation list based on the type filter
+                val typeFilteredList = generationFilteredList.filter { it.types.contains(_currentTypeFiltering.toString()) }
 
-                _items.value = ArrayList(pokemonToShow)
+                _items.value = ArrayList(typeFilteredList)
             } else {
                 _items.value = emptyList()
                 showSnackbarMessage(R.string.loading_pokemon_error)

@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <!-- sets the style for the overflow button -->
         <item name="actionOverflowButtonStyle">@style/actionOverflowButtonStyle</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <!-- This style defines the tint color of the overflow menu button -->

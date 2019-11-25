@@ -45,6 +45,12 @@ android {
     packagingOptions {
         exclude "META-INF/LICENSE*"
     }
+
+    // allows binding of livedata from viewmodel to view
+    dataBinding {
+        enabled = true
+        enabledForTests = true
+    }
 }
 
 dependencies {

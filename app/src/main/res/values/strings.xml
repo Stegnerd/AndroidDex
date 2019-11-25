@@ -5,22 +5,56 @@
     <string name="loading_pokemon_error">Error while loading pokemon</string>
 
     <!-- Filters -->
+    <!-- Generation -->
     <string name="label_all">All</string>
+    <string name="label_all_no_pokemon">No pokemon of those type(s) exist in the national dex</string>
     <string name="label_kanto">Kanto</string>
+    <string name="label_kanto_no_pokemon">No pokemon of those type(s) exist in the Kanto dex</string>
     <string name="label_jhoto">Jhoto</string>
+    <string name="label_jhoto_no_pokemon">No pokemon of those type(s) exist in the Jhoto dex</string>
     <string name="label_hoenn">Hoenn</string>
+    <string name="label_hoenn_no_pokemon">No pokemon of those type(s) exist in the Hoenn dex</string>
     <string name="label_sinnoh">Sinnoh</string>
+    <string name="label_sinnoh_no_pokemon">No pokemon of those type(s) exist in the Sinnoh dex</string>
     <string name="label_unova">Unova</string>
+    <string name="label_unova_no_pokemon">No pokemon of those type(s) exist in the Unova dex</string>
     <string name="label_kalos">Kalos</string>
+    <string name="label_kalos_no_pokemon">No pokemon of those type(s) exist in the Kalos dex</string>
     <string name="label_alola">Alola</string>
+    <string name="label_alola_no_pokemon">No pokemon of those type(s) exist in the Alola dex</string>
     <string name="label_galar">Galar</string>
+    <string name="label_galar_no_pokemon">No pokemon of those type(s) exist in the Galar dex</string>
+    <!-- types -->
+    <string name="label_type_bug">Bug</string>
+    <string name="label_type_dark">Dark</string>
+    <string name="label_type_dragon">Dragon</string>
+    <string name="label_type_electric">Electric</string>
+    <string name="label_type_fairy">Fairy</string>
+    <string name="label_type_fighting">Fighting</string>
+    <string name="label_type_fire">Fire</string>
+    <string name="label_type_flying">Flying</string>
+    <string name="label_type_ghost">Ghost</string>
+    <string name="label_type_grass">Grass</string>
+    <string name="label_type_ground">Ground</string>
+    <string name="label_type_ice">Ice</string>
+    <string name="label_type_normal">Normal</string>
+    <string name="label_type_poison">Poison</string>
+    <string name="label_type_psychic">Psychic</string>
+    <string name="label_type_rock">Rock</string>
+    <string name="label_type_steel">Steel</string>
+    <string name="label_type_water">Water</string>
 
     <!-- Accessibility -->
     <string name="logo_image_name">PokeBall</string>
+    <string name="no_pokemon_image_name">No Pokemon Image</string>
     <string name="menu_image_pokedex">Pokedex</string>
 
 
     <!-- Menu Items -->
     <!-- Drawer Menu-->
     <string name="menu_drawer_pokedex">Pokedex</string>
+
+    <!-- ContextMenu Options-->
+    <!-- List View -->
+    <string name="menu_context_pokemonlist_filter">Filter</string>
 </resources>
