@@ -25,6 +25,7 @@
             android:orientation="vertical"
             android:focusable="true">
 
+            <!-- This layout is displayed when there is at least one pokemon in the list -->
             <LinearLayout
                 android:id="@+id/pokemonListLinearLayout"
                 android:layout_width="match_parent"
@@ -41,7 +42,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="16dp"
                     android:gravity="center_vertical"
-                    android:text="@{context.getString(viewmodel.currentGenerationFilteringLabel)}"
+                    android:text="@{context.getString(viewmodel.currentTypeFilteringLabel)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
 
@@ -54,6 +55,7 @@
 
             </LinearLayout>
 
+            <!--  This layout is displayed when there are no pokemon in the list-->
             <LinearLayout
                 android:id="@+id/noPokemon"
                 android:layout_width="wrap_content"
