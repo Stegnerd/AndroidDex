@@ -1,14 +1,14 @@
 package com.stegner.androiddex.pokemonlist
 
-import android.graphics.drawable.AdaptiveIconDrawable
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.stegner.androiddex.R
-import com.stegner.androiddex.data.Result
 import com.stegner.androiddex.data.Result.Success
 import com.stegner.androiddex.data.pokemon.Pokemon
 import com.stegner.androiddex.data.pokemon.repository.PokemonRepository
+import com.stegner.androiddex.data.succeeded
 import com.stegner.androiddex.util.Event
 import com.stegner.androiddex.util.GenerationFilterType
 import com.stegner.androiddex.util.TypeFilter
@@ -16,6 +16,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PokemonListViewModel @Inject constructor (private val pokemonRepository: PokemonRepository): ViewModel() {
+
+    // just an instance of this classes name for logging purposes
+    private val TAG by lazy { PokemonListViewModel::class.java.simpleName}
 
     // This is the list of items to display in the list view
     private val _items= MutableLiveData<List<Pokemon>>().apply { value = emptyList() }
@@ -200,14 +203,24 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
             // all pokemon from  the repository
             val pokemonResult = pokemonRepository.getPokemon()
 
+            Log.w(TAG, "pokemonResult: ${pokemonResult.succeeded}")
+
             if(pokemonResult is Success){
                 val pokemon = pokemonResult.data
 
+                Log.w(TAG, "pokemon count: ${pokemon.count()}")
+                Log.w(TAG, "Generation filter: ${_curentGenerationFiltering.generation}")
+                Log.w(TAG, "type filter: ${_currentTypeFiltering}")
+
                 // filter all pokemon according to the generation
-                val generationFilteredList = pokemon.filter { it.generation == _curentGenerationFiltering.generation }
+                val generationFilteredList = generationFilter(pokemon)
+
+                Log.w(TAG, "Generation filtered list count: ${generationFilteredList.count()}")
 
                 // filter the generation list based on the type filter
-                val typeFilteredList = generationFilteredList.filter { it.types.contains(_currentTypeFiltering.toString()) }
+                val typeFilteredList = typeFilter(generationFilteredList)
+
+                Log.w(TAG, "Type filtered list count: ${typeFilteredList.count()}")
 
                 _items.value = ArrayList(typeFilteredList)
             } else {
@@ -217,5 +230,33 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
 
             _dataLoading.value = false
         }
+    }
+
+    private fun generationFilter(prefilteredList: List<Pokemon>): List<Pokemon> {
+        val filteredList = mutableListOf<Pokemon>()
+
+        for (poke in prefilteredList){
+            if(_curentGenerationFiltering.generation == 0){
+                filteredList.add(poke)
+            }else if(poke.generation == _curentGenerationFiltering.generation) {
+                filteredList.add(poke)
+            }
+        }
+
+        return filteredList
+    }
+
+    private fun typeFilter(prefilteredList: List<Pokemon>): List<Pokemon> {
+        val filteredList = mutableListOf<Pokemon>()
+
+        for (poke in prefilteredList) {
+            if (_currentTypeFiltering.type == 0) {
+                filteredList.add(poke)
+            } else if (poke.types.contains(_currentTypeFiltering.toString())) {
+                filteredList.add(poke)
+            }
+        }
+
+        return filteredList
     }
 }

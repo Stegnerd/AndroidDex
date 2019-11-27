@@ -32,12 +32,13 @@
                 android:paddingEnd="16dp"
                 android:paddingBottom="16dp">
 
+                <!-- Learning tip: you cannot use int as value for text, need to get string of it -->
                 <TextView
                     android:id="@+id/pokedexNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{pokemon.id}"
+                    android:text="@{String.valueOf(pokemon.id)}"
                     tools:text="123" />
 
                 <TextView

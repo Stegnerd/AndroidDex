@@ -5,6 +5,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
+/**
+ * Data Access Object for the pokemon table
+ */
 @Dao
 interface PokemonDao {
 
@@ -39,13 +42,13 @@ interface PokemonDao {
      *
      * @return the pokemons with the given types
      */
-    @Query("SELECT * FROM pokemon WHERE type LIKE :typeOne AND :typeTwo")
+    @Query("SELECT * FROM Pokemon WHERE type LIKE :typeOne AND :typeTwo")
     suspend fun getPokemonByType(typeOne: String, typeTwo: String): List<Pokemon>?
 
     /**
      * Select a list of pokemon based on the generation it is from
      */
-    @Query("SELECT * FROM pokemon WHERE generation = :gen")
+    @Query("SELECT * FROM Pokemon WHERE generation = :gen")
     suspend fun getPokemonByGeneration(gen: Int): List<Pokemon>?
 
     /**

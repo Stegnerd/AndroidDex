@@ -2,6 +2,7 @@ package com.stegner.androiddex.dependencyinjection
 
 import android.content.Context
 import com.stegner.androiddex.AndroidDexApplication
+import com.stegner.androiddex.dependencyinjection.workers.WorkerModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -34,7 +35,8 @@ import javax.inject.Singleton
     modules = [
         ApplicationModule::class,
         AndroidSupportInjectionModule::class,
-        PokemonListModule::class
+        PokemonListModule::class,
+        WorkerModule::class
     ])
 interface ApplicationComponent : AndroidInjector<AndroidDexApplication> {
 

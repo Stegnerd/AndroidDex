@@ -9,9 +9,9 @@ import androidx.work.WorkManager
 import com.stegner.androiddex.data.pokemon.PokemonDatabase
 import com.stegner.androiddex.data.pokemon.datasource.PokemonDataSource
 import com.stegner.androiddex.data.pokemon.datasource.PokemonLocalDataSource
-import com.stegner.androiddex.data.pokemon.repository.PokemonRepository
 import com.stegner.androiddex.data.pokemon.repository.DefaultPokemonRepository
-import com.stegner.androiddex.util.SeedDatabaseWorker
+import com.stegner.androiddex.data.pokemon.repository.PokemonRepository
+import com.stegner.androiddex.dependencyinjection.workers.DataBaseSeedWorker
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -65,7 +65,7 @@ object ApplicationModule {
             .addCallback(object: RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
-                    val request = OneTimeWorkRequestBuilder<SeedDatabaseWorker>().build()
+                    val request = OneTimeWorkRequestBuilder<DataBaseSeedWorker>().build()
                     WorkManager.getInstance(context).enqueue(request)
                 }
             })
