@@ -7,23 +7,23 @@ class Helpers {
 
         fun typeEnumFromId(id: Int) : TypeFilter{
             return when(id){
-                R.id.bug -> TypeFilter.Bug
-                R.id.dark -> TypeFilter.Dark
-                R.id.dragon -> TypeFilter.Dragon
-                R.id.electric -> TypeFilter.Electric
-                R.id.fairy -> TypeFilter.Fairy
-                R.id.fighting -> TypeFilter.Fighting
-                R.id.fire -> TypeFilter.Fire
-                R.id.flying -> TypeFilter.Flying
-                R.id.ghost -> TypeFilter.Ghost
-                R.id.ground -> TypeFilter.Ground
-                R.id.ice -> TypeFilter.Ice
-                R.id.normal -> TypeFilter.Normal
-                R.id.poison -> TypeFilter.Poison
-                R.id.psychic -> TypeFilter.Psychic
-                R.id.rock -> TypeFilter.Rock
-                R.id.steel -> TypeFilter.Steel
-                R.id.water -> TypeFilter.Water
+                R.id.type_filter_bug -> TypeFilter.Bug
+                R.id.type_filter_dark -> TypeFilter.Dark
+                R.id.type_filter_dragon -> TypeFilter.Dragon
+                R.id.type_filter_electric -> TypeFilter.Electric
+                R.id.type_filter_fairy -> TypeFilter.Fairy
+                R.id.type_filter_fighting -> TypeFilter.Fighting
+                R.id.type_filter_fire -> TypeFilter.Fire
+                R.id.type_filter_flying -> TypeFilter.Flying
+                R.id.type_filter_ghost -> TypeFilter.Ghost
+                R.id.type_filter_ground -> TypeFilter.Ground
+                R.id.type_filter_ice -> TypeFilter.Ice
+                R.id.type_filter_normal -> TypeFilter.Normal
+                R.id.type_filter_poison -> TypeFilter.Poison
+                R.id.type_filter_psychic -> TypeFilter.Psychic
+                R.id.type_filter_rock -> TypeFilter.Rock
+                R.id.type_filter_steel -> TypeFilter.Steel
+                R.id.type_filter_water -> TypeFilter.Water
                 else -> TypeFilter.All
             }
         }

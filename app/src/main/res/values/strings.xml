@@ -24,7 +24,9 @@
     <string name="label_alola_no_pokemon">No pokemon of those type(s) exist in the Alola dex</string>
     <string name="label_galar">Galar</string>
     <string name="label_galar_no_pokemon">No pokemon of those type(s) exist in the Galar dex</string>
+
     <!-- types -->
+    <string name="label_type_all">All</string>
     <string name="label_type_bug">Bug</string>
     <string name="label_type_dark">Dark</string>
     <string name="label_type_dragon">Dragon</string>

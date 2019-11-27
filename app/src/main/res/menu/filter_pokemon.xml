@@ -1,57 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/bug"
+        android:id="@+id/type_filter_all"
+        android:title="@string/label_type_all"/>
+    <item
+        android:id="@+id/type_filter_bug"
         android:title="@string/label_type_bug"/>
     <item
-        android:id="@+id/electric"
+        android:id="@+id/type_filter_electric"
         android:title="@string/label_type_electric"/>
     <item
-        android:id="@+id/dark"
+        android:id="@+id/type_filter_dark"
         android:title="@string/label_type_dark"/>
     <item
-        android:id="@+id/dragon"
+        android:id="@+id/type_filter_dragon"
         android:title="@string/label_type_dragon"/>
     <item
-        android:id="@+id/fairy"
+        android:id="@+id/type_filter_fairy"
         android:title="@string/label_type_fairy"/>
     <item
-        android:id="@+id/fighting"
+        android:id="@+id/type_filter_fighting"
         android:title="@string/label_type_fighting"/>
     <item
-        android:id="@+id/fire"
+        android:id="@+id/type_filter_fire"
         android:title="@string/label_type_fire"/>
     <item
-        android:id="@+id/flying"
+        android:id="@+id/type_filter_flying"
         android:title="@string/label_type_flying"/>
     <item
-        android:id="@+id/ghost"
+        android:id="@+id/type_filter_ghost"
         android:title="@string/label_type_ghost"/>
     <item
-        android:id="@+id/grass"
+        android:id="@+id/type_filter_grass"
         android:title="@string/label_type_grass"/>
     <item
-        android:id="@+id/ground"
+        android:id="@+id/type_filter_ground"
         android:title="@string/label_type_ground"/>
     <item
-        android:id="@+id/ice"
+        android:id="@+id/type_filter_ice"
         android:title="@string/label_type_ice"/>
     <item
-        android:id="@+id/normal"
+        android:id="@+id/type_filter_normal"
         android:title="@string/label_type_normal"/>
     <item
-        android:id="@+id/poison"
+        android:id="@+id/type_filter_poison"
         android:title="@string/label_type_poison"/>
     <item
-        android:id="@+id/psychic"
+        android:id="@+id/type_filter_psychic"
         android:title="@string/label_type_psychic"/>
     <item
-        android:id="@+id/rock"
+        android:id="@+id/type_filter_rock"
         android:title="@string/label_type_rock"/>
     <item
-        android:id="@+id/steel"
+        android:id="@+id/type_filter_steel"
         android:title="@string/label_type_steel"/>
     <item
-        android:id="@+id/water"
+        android:id="@+id/type_filter_water"
         android:title="@string/label_type_water"/>
 </menu>
