@@ -5,9 +5,12 @@ import android.view.*
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.stegner.androiddex.R
 import com.stegner.androiddex.databinding.PokemonlistFragBinding
+import com.stegner.androiddex.util.GRID_COLUMN_COUNT
 import com.stegner.androiddex.util.Helpers
+import com.stegner.androiddex.util.ItemOffsetDecoration
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
@@ -49,9 +52,10 @@ class PokemonListFragment : DaggerFragment() {
 
         // set up navigation with fragment directions
         setupNavigation()
-
         // bind the recycler view to the list adapter
         setUpListAdapter()
+        // bind the recycler view to the grid adapter with custom padding
+        setUpGridManager()
 
         viewModel.loadPokemon()
     }
@@ -119,6 +123,19 @@ class PokemonListFragment : DaggerFragment() {
             viewDataBinding.pokemonList.adapter = listAdapter
         }else {
             Timber.w("Viewmodel not initialized when attempting to set up adapter.")
+        }
+    }
+
+    private fun setUpGridManager(){
+        val viewModel = viewDataBinding.viewmodel
+        if(viewModel != null){
+            // set the recycler view to use gridlayout, give it the context and how many columns there should be
+            viewDataBinding.pokemonList.layoutManager = GridLayoutManager(requireContext(), GRID_COLUMN_COUNT)
+
+            // add custom padding around each item in the list, in this case 8dp on all 4 sides
+            viewDataBinding.pokemonList.addItemDecoration(ItemOffsetDecoration(requireContext(), R.dimen.gridlayout_item_offset))
+        }else {
+            Timber.w("Viewmodel is not initialized when attempting to set up GridManager.")
         }
     }
 }

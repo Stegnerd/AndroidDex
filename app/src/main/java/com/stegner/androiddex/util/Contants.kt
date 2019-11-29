@@ -7,6 +7,8 @@ package com.stegner.androiddex.util
 // File Names
 const val POKEMON_FILE_NAME = "pokedex.json"
 
+// Settings
+const val GRID_COLUMN_COUNT = 3
 
 // Errors
 // Database

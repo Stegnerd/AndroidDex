@@ -43,15 +43,16 @@
                     android:layout_marginBottom="16dp"
                     android:gravity="center_vertical"
                     android:text="@{context.getString(viewmodel.currentTypeFilteringLabel)}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/pokemon_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:items="@{viewmodel.items}"/>
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:padding="@dimen/gridlayout_item_offset"
+                    app:items="@{viewmodel.items}" />
 
             </LinearLayout>
 

@@ -50,10 +50,11 @@ class PokemonListAdapter (private val viewModel: PokemonListViewModel) : ListAda
             }
         }
     }
-
 }
 
-
+/**
+ * Used to detect differences in the RecyclerView and trigger updates if necessary
+ */
 class PokemonDiffCallback : DiffUtil.ItemCallback<Pokemon>() {
     override fun areItemsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
         return oldItem.id == newItem.id
@@ -62,5 +63,4 @@ class PokemonDiffCallback : DiffUtil.ItemCallback<Pokemon>() {
     override fun areContentsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
         return oldItem == newItem
     }
-
 }
