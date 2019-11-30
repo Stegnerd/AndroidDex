@@ -3,6 +3,7 @@ package com.stegner.androiddex.pokemonlist
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -98,6 +99,10 @@ class PokemonListFragment : DaggerFragment() {
                 viewModel.setTypeFiltering(Helpers.typeEnumFromId(it.itemId))
                 // reload data now that filter has been applied
                 viewModel.loadPokemon()
+
+                // reset to top of list when item from filter has been selected
+                resetPositionToTop()
+
                 // setOnMenuItemClickListener needs to return a bool to indicate that it is done handling the event
                 true
             }
@@ -126,6 +131,11 @@ class PokemonListFragment : DaggerFragment() {
         }
     }
 
+    /**
+     * Binds the pokemon list recyclerview to the [GridLayoutManager]
+     *
+     * Also adds custom decoration to add padding to each item in the list
+     */
     private fun setUpGridManager(){
         val viewModel = viewDataBinding.viewmodel
         if(viewModel != null){
@@ -136,6 +146,22 @@ class PokemonListFragment : DaggerFragment() {
             viewDataBinding.pokemonList.addItemDecoration(ItemOffsetDecoration(requireContext(), R.dimen.gridlayout_item_offset))
         }else {
             Timber.w("Viewmodel is not initialized when attempting to set up GridManager.")
+        }
+    }
+
+    /**
+     * Updates the listadapter to the top position when filter has been changed
+     */
+    private fun resetPositionToTop() {
+        val view = viewDataBinding.pokemonList
+        if (view != null){
+
+            // this only performs the action when the layout has been laid down
+            view.doOnNextLayout {
+                view.layoutManager?.scrollToPosition(0)
+            }
+        }else {
+            Timber.w("viewmodel is not initialized when attempting to reset recycler position")
         }
     }
 }

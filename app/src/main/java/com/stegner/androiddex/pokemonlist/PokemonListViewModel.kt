@@ -197,6 +197,7 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
      * Loads all pokemon from database into list view based on filtering
      */
     fun loadPokemon() {
+        _dataLoading.value = true
 
         // This is the coroutine scope for the viewmodel async methods
         viewModelScope.launch {
@@ -225,6 +226,7 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
                 _items.value = ArrayList(typeFilteredList)
             } else {
                 _items.value = emptyList()
+                _dataLoading.value = false
                 showSnackbarMessage(R.string.loading_pokemon_error)
             }
 

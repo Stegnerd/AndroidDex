@@ -17,13 +17,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- Dp not show view until data is done/ there was an error loading-->
         <RelativeLayout
             android:id="@+id/pokemonListContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
             android:orientation="vertical"
-            android:focusable="true">
+            android:focusable="true"
+            android:visibility="@{viewmodel.dataLoading ? View.GONE : View.VISIBLE}">
 
             <!-- This layout is displayed when there is at least one pokemon in the list -->
             <LinearLayout
