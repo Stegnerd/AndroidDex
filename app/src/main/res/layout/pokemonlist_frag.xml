@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <import type="androidx.core.content.ContextCompat"/>
+
+        <variable
+            name="viewmodel"
+            type="com.stegner.androiddex.pokemonlist.PokemonListViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Dp not show view until data is done/ there was an error loading-->
+        <RelativeLayout
+            android:id="@+id/pokemonListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:focusable="true"
+            android:visibility="@{viewmodel.dataLoading ? View.GONE : View.VISIBLE}">
+
+            <!-- This layout is displayed when there is at least one pokemon in the list -->
+            <LinearLayout
+                android:id="@+id/pokemonListLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="@{viewmodel.empty ? View.GONE : View.VISIBLE}">
+
+                <TextView
+                    android:id="@+id/generationFilteringLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center_vertical"
+                    android:text="@{context.getString(viewmodel.currentTypeFilteringLabel)}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/pokemon_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:padding="@dimen/gridlayout_item_offset"
+                    app:items="@{viewmodel.items}" />
+
+            </LinearLayout>
+
+            <!--  This layout is displayed when there are no pokemon in the list-->
+            <LinearLayout
+                android:id="@+id/noPokemon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:visibility="@{viewmodel.empty ? View.VISIBLE : View.GONE}">
+
+                <ImageView
+                    android:id="@+id/noPokemonIcon"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/no_pokemon_image_name"
+                    android:src="@{ContextCompat.getDrawable(context, viewmodel.noPokemonIconRes)}" />
+
+                <TextView
+                    android:id="@+id/noPokemonMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:text="@{context.getString(viewmodel.noPokemonLabel)}"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

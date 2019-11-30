@@ -13,6 +13,7 @@ import com.stegner.androiddex.util.GET_POKEMON_LIST_ERROR
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -38,16 +39,16 @@ class DefaultPokemonRepository @Inject constructor(@ApplicationModule.PokemonLoc
                 return@withContext Success(list.data.sortedBy { it.id })
             }
 
-            return@withContext Error(Exception(pokemonFromDatabase.toString()))
+            return@withContext pokemonFromDatabase
         }
     }
 
     private suspend fun fetchPokemonListFromDataSource(): Result<List<Pokemon>> {
         val pokemon = pokemonLocalDataSource.getPokemon()
-        return if(pokemon is Success) {
-            pokemon
-        }else {
-            Error(Exception(GET_POKEMON_LIST_ERROR))
+
+        return when(pokemon){
+            is Success -> pokemon
+            else -> Error(Exception(pokemon.toString()))
         }
     }
 
@@ -64,11 +65,11 @@ class DefaultPokemonRepository @Inject constructor(@ApplicationModule.PokemonLoc
         return if(pokemon is Success){
             pokemon
         }else {
-            Error(Exception(GET_POKEMON_ERROR))
+            Error(Exception(pokemon.toString()))
         }
     }
 
-    override suspend fun getPokemon(type: String): Result<List<Pokemon>> {
+    override suspend fun getPokemonByType(type: String): Result<List<Pokemon>> {
         return withContext(ioDispatcher) {
             val pokemonFromDatabase = fetchPokemonListFromDataSourceByType(type, null)
 
@@ -76,11 +77,11 @@ class DefaultPokemonRepository @Inject constructor(@ApplicationModule.PokemonLoc
                 return@withContext Success(list.data.sortedBy { it.id })
             }
 
-            return@withContext Error(Exception(pokemonFromDatabase.toString()))
+            return@withContext pokemonFromDatabase
         }
     }
 
-    override suspend fun getPokemon(typeOne: String, typeTwo: String): Result<List<Pokemon>> {
+    override suspend fun getPokemonByTypes(typeOne: String, typeTwo: String): Result<List<Pokemon>> {
         return withContext(ioDispatcher) {
             val pokemonFromDatabase = fetchPokemonListFromDataSourceByType(typeOne, typeTwo)
 
@@ -88,26 +89,44 @@ class DefaultPokemonRepository @Inject constructor(@ApplicationModule.PokemonLoc
                 return@withContext Success(list.data.sortedBy { it.id  })
             }
 
-            return@withContext Error(Exception(pokemonFromDatabase.toString()))
+            return@withContext pokemonFromDatabase
         }
     }
 
     private suspend fun fetchPokemonListFromDataSourceByType(typeOne: String, typeTwo: String?) : Result<List<Pokemon>>{
 
         val pokemon: Result<List<Pokemon>> = if(typeTwo != null){
-            pokemonLocalDataSource.getPokemon(typeOne, typeTwo)
-
+            pokemonLocalDataSource.getPokemonByTypes(typeOne, typeTwo)
         }else {
-            pokemonLocalDataSource.getPokemon(typeOne)
+            pokemonLocalDataSource.getPokemonByType(typeOne)
         }
 
         return if(pokemon is Success){
             pokemon
         }else {
-            Error(Exception(GET_POKEMON_BY_TYPE_ERROR))
+            Error(Exception(pokemon.toString()))
         }
     }
 
+    override suspend fun getPokemonByGeneration(generation: Int): Result<List<Pokemon>> {
+        return withContext(ioDispatcher) {
+            val pokemonFromDatabase = fetchPokemonListFRomDataSourceByGeneration(generation)
 
+            (pokemonFromDatabase as? Success)?.let { list ->
+                return@withContext Success(list.data.sortedBy { it.id })
+            }
+
+            return@withContext pokemonFromDatabase
+        }
+    }
+
+    private suspend fun fetchPokemonListFRomDataSourceByGeneration(generation: Int): Result<List<Pokemon>>{
+        val pokemonFromDatabase = pokemonLocalDataSource.getPokemonByGen(generation)
+        return if(pokemonFromDatabase is Success){
+            pokemonFromDatabase
+        }else {
+            Error(Exception(pokemonLocalDataSource.toString()))
+        }
+    }
 
 }

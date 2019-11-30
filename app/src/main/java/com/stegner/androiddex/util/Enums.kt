@@ -1,0 +1,35 @@
+package com.stegner.androiddex.util
+
+enum class GenerationFilterType(val generation: Int) {
+    ALL(0),
+    KANTO(1),
+    JHOTO(2),
+    HOENN(3),
+    SINNOH(4),
+    UNOVA(5),
+    KALOS(6),
+    ALOLA(7),
+    GALAR(8)
+}
+
+enum class TypeFilter(val type: Int){
+    All(0),
+    Bug(1),
+    Dark(2),
+    Dragon(3),
+    Electric(4),
+    Fairy(5),
+    Fighting(6),
+    Fire(7),
+    Flying(8),
+    Ghost(9),
+    Grass(10),
+    Ground(11),
+    Ice(12),
+    Normal(13),
+    Poison(14),
+    Psychic(15),
+    Rock(16),
+    Steel(17),
+    Water(18)
+}

@@ -9,14 +9,15 @@ import androidx.work.WorkManager
 import com.stegner.androiddex.data.pokemon.PokemonDatabase
 import com.stegner.androiddex.data.pokemon.datasource.PokemonDataSource
 import com.stegner.androiddex.data.pokemon.datasource.PokemonLocalDataSource
-import com.stegner.androiddex.data.pokemon.repository.PokemonRepository
 import com.stegner.androiddex.data.pokemon.repository.DefaultPokemonRepository
-import com.stegner.androiddex.util.SeedDatabaseWorker
+import com.stegner.androiddex.data.pokemon.repository.PokemonRepository
+import com.stegner.androiddex.dependencyinjection.workers.DataBaseSeedWorker
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import timber.log.Timber
 import javax.inject.Qualifier
 import javax.inject.Singleton
 import kotlin.annotation.AnnotationRetention.RUNTIME
@@ -27,7 +28,8 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
  * @Module - provides dependencies for the component
  * @Qualifier - marker on a class so that when it is encountered it is known which one to use,
  *              helpful when two things inherit from the same parent
- * @Retention - This meta-annotation determines whether an annotation is stored in binary output and visible for reflection, in this case yes
+ * @Retention - A tag that stays forever with the programming element even after compiled, and it is visible via reflection, in this case yes
+ *
  * @Singleton - only one instance is shared among the application
  * @JvmStatic - creates an instance of the companion method for java classes to use it. that way it can be referenced the same
  *              way as a kotlin function
@@ -56,11 +58,14 @@ object ApplicationModule {
     @Singleton
     @Provides
     fun provideDatabase(context: Context): PokemonDatabase {
+
+        Timber.w("ABOUT TO START SEEDING DATABASE")
+
         return Room.databaseBuilder(context.applicationContext, PokemonDatabase::class.java, "Pokemon.db")
             .addCallback(object: RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
-                    val request = OneTimeWorkRequestBuilder<SeedDatabaseWorker>().build()
+                    val request = OneTimeWorkRequestBuilder<DataBaseSeedWorker>().build()
                     WorkManager.getInstance(context).enqueue(request)
                 }
             })
