@@ -234,6 +234,11 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
         }
     }
 
+    /**
+     * Iterates over list of loaded pokemon and applies generation filter to it.
+     *
+     * @return List<Pokemon> that is within filter
+     */
     private fun generationFilter(prefilteredList: List<Pokemon>): List<Pokemon> {
         val filteredList = mutableListOf<Pokemon>()
 
@@ -248,6 +253,11 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
         return filteredList
     }
 
+    /**
+     * Iterates overs list of loaded pokemon and applies type filter to it.
+     *
+     * @return List<Pokemon> that is within filter
+     */
     private fun typeFilter(prefilteredList: List<Pokemon>): List<Pokemon> {
         val filteredList = mutableListOf<Pokemon>()
 
