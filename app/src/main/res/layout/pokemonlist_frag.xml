@@ -17,6 +17,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/generationFilteringLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical"
+            android:text="@{context.getString(viewmodel.currentTypeFilteringLabel)}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
         <!-- Dp not show view until data is done/ there was an error loading-->
         <RelativeLayout
             android:id="@+id/pokemonListContainer"
@@ -25,6 +37,7 @@
             android:clickable="true"
             android:orientation="vertical"
             android:focusable="true"
+            android:layout_marginTop="48dp"
             android:visibility="@{viewmodel.dataLoading ? View.GONE : View.VISIBLE}">
 
             <!-- This layout is displayed when there is at least one pokemon in the list -->
@@ -35,17 +48,7 @@
                 android:orientation="vertical"
                 android:visibility="@{viewmodel.empty ? View.GONE : View.VISIBLE}">
 
-                <TextView
-                    android:id="@+id/generationFilteringLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="16dp"
-                    android:gravity="center_vertical"
-                    android:text="@{context.getString(viewmodel.currentTypeFilteringLabel)}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
 
 
                 <androidx.recyclerview.widget.RecyclerView
