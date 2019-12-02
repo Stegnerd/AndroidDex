@@ -46,6 +46,29 @@
     <string name="label_type_steel">Steel</string>
     <string name="label_type_water">Water</string>
 
+    <string-array name="type_filter">
+        <item>@string/label_type_all</item>
+        <item>@string/label_type_bug</item>
+        <item>@string/label_type_dark</item>
+        <item>@string/label_type_dragon</item>
+        <item>@string/label_type_electric</item>
+        <item>@string/label_type_fairy</item>
+        <item>@string/label_type_fighting</item>
+        <item>@string/label_type_fire</item>
+        <item>@string/label_type_flying</item>
+        <item>@string/label_type_ghost</item>
+        <item>@string/label_type_grass</item>
+        <item>@string/label_type_ground</item>
+        <item>@string/label_type_ice</item>
+        <item>@string/label_type_normal</item>
+        <item>@string/label_type_poison</item>
+        <item>@string/label_type_psychic</item>
+        <item>@string/label_type_rock</item>
+        <item>@string/label_type_steel</item>
+        <item>@string/label_type_water</item>
+    </string-array>
+
+
     <!-- Accessibility -->
     <string name="logo_image_name">PokeBall</string>
     <string name="no_pokemon_image_name">No Pokemon Image</string>

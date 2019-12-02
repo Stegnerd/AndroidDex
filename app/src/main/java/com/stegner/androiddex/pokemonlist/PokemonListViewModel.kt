@@ -32,12 +32,9 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
     private val _currentGenerationFilteringLabel = MutableLiveData<Int>()
     val currentGenerationFilteringLabel : LiveData<Int> = _currentGenerationFilteringLabel
 
-    private val _currentTypeFilteringLabel = MutableLiveData<Int>()
-    val currentTypeFilteringLabel : LiveData<Int> = _currentTypeFilteringLabel
-
     // Determines the id of the string to show when no pokemon are available
-    private val _noPokemonLabel= MutableLiveData<Int>()
-    val noPokemonLabel: LiveData<Int> = _noPokemonLabel
+    private val _noPokemonLabel= MutableLiveData<String>()
+    val noPokemonLabel: LiveData<String> = _noPokemonLabel
 
     // Determines the id of the image to show when no pokemon are available
     private val _noPokemonIconRes = MutableLiveData<Int>()
@@ -55,7 +52,8 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
     private var _curentGenerationFiltering = GenerationFilterType.ALL
 
     // Determines the filter based on type on the list of _items
-    private var _currentTypeFiltering = TypeFilter.All
+    // set to MutableList to handle updates from ui
+    private var _currentTypeFiltering = mutableListOf<TypeFilter>()
 
     // used by the layout to determine when the list of items is empty
     val empty: LiveData<Boolean> = Transformations.map(_items){
@@ -64,7 +62,7 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
 
     init {
         setGenerationFiltering(GenerationFilterType.ALL)
-        setTypeFiltering(TypeFilter.All)
+        setTypeFiltering(TypeFilter.All, true)
         loadPokemon()
     }
 
@@ -123,73 +121,46 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
         _filterIconRes.value = filteringIconDrawable
     }
 
-    fun setTypeFiltering(filter: TypeFilter){
-        _currentTypeFiltering = filter
-
-        when(filter){
-            TypeFilter.All -> {
-                setTypeFilter(R.string.label_all)
-            }
-            TypeFilter.Bug -> {
-                setTypeFilter(R.string.label_type_bug)
-            }
-            TypeFilter.Dark -> {
-                setTypeFilter(R.string.label_type_dark)
-            }
-            TypeFilter.Dragon -> {
-                setTypeFilter(R.string.label_type_dragon)
-            }
-            TypeFilter.Electric -> {
-                setTypeFilter(R.string.label_type_electric)
-            }
-            TypeFilter.Fairy -> {
-                setTypeFilter(R.string.label_type_fairy)
-            }
-            TypeFilter.Fighting -> {
-                setTypeFilter(R.string.label_type_fighting)
-            }
-            TypeFilter.Fire -> {
-                setTypeFilter(R.string.label_type_fire)
-            }
-            TypeFilter.Flying -> {
-                setTypeFilter(R.string.label_type_flying)
-            }
-            TypeFilter.Ghost -> {
-                setTypeFilter(R.string.label_type_ghost)
-            }
-            TypeFilter.Grass -> {
-                setTypeFilter(R.string.label_type_grass)
-            }
-            TypeFilter.Ground -> {
-                setTypeFilter(R.string.label_type_ground)
-            }
-            TypeFilter.Ice -> {
-                setTypeFilter(R.string.label_type_ice)
-            }
-            TypeFilter.Normal -> {
-                setTypeFilter(R.string.label_type_normal)
-            }
-            TypeFilter.Poison -> {
-                setTypeFilter(R.string.label_type_poison)
-            }
-            TypeFilter.Psychic -> {
-                setTypeFilter(R.string.label_type_psychic)
-            }
-            TypeFilter.Rock -> {
-                setTypeFilter(R.string.label_type_rock)
-            }
-            TypeFilter.Steel -> {
-                setTypeFilter(R.string.label_type_steel)
-            }
-            TypeFilter.Water -> {
-                setTypeFilter(R.string.label_type_water)
-            }
+    /**
+     * Updates the current type filter list.
+     *
+     * @param filter The [TypeFilter] to be added/removed
+     * @param add Flag to determine if [TypeFilter] should be added
+     */
+    fun setTypeFiltering(filter: TypeFilter, add: Boolean){
+        if(add){
+            _currentTypeFiltering.add(filter)
+        }else {
+            _currentTypeFiltering.remove(filter)
         }
+
+        // if clicked all to reset ui clear list and add All
+        if(filter == TypeFilter.All){
+            _currentTypeFiltering.clear()
+            _currentTypeFiltering.add(filter)
+        }
+        // If All is in the list and new type added remove All to apply filter
+        // ex: All is checked and user clicks Electric
+        else if(_currentTypeFiltering.contains(TypeFilter.All) && _currentTypeFiltering.count() > 1){
+            _currentTypeFiltering.remove(TypeFilter.All)
+        }
+        // If user unchecks all filters reset back to All
+        // ex: Electric is checked and user unchecks it. Reset to All
+        else if(_currentTypeFiltering.count() == 0){
+            _currentTypeFiltering.add(TypeFilter.All)
+        }
+
+        // Updates the filter string and icon when too many filters applied
+        setTypeFilter()
     }
 
-    private fun setTypeFilter(@StringRes filteringLabelString: Int){
-        _currentTypeFilteringLabel.value = filteringLabelString
-        _noPokemonLabel.value = R.string.label_all_no_pokemon
+    /**
+     * Sets the string and icon for when a filter has no results.
+     */
+    private fun setTypeFilter(){
+        val currentFilterCommaString = _currentTypeFiltering.joinToString { it.toString() }
+
+        _noPokemonLabel.value = "No pokemon of those type combinations exist: $currentFilterCommaString"
         _noPokemonIconRes.value = R.drawable.ic_gotcha
     }
 
@@ -260,15 +231,34 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
      */
     private fun typeFilter(prefilteredList: List<Pokemon>): List<Pokemon> {
         val filteredList = mutableListOf<Pokemon>()
+        val typeListFilter = _currentTypeFiltering.map { it.toString() }
 
         for (poke in prefilteredList) {
-            if (_currentTypeFiltering.type == 0) {
-                filteredList.add(poke)
-            } else if (poke.types.contains(_currentTypeFiltering.toString())) {
-                filteredList.add(poke)
+            when {
+                // if the filter type is all add it regardless
+                _currentTypeFiltering.contains(TypeFilter.All) -> {
+                    filteredList.add(poke)
+                }
+                // if there is no filter selected and user didn't hit All, add all
+                // to simulate not filtered
+                _currentTypeFiltering.count() == 0 -> {
+                    filteredList.add(poke)
+                }
+                // if there has been filer selected make sure that it applies to all types or do
+                // not add it to the list
+                poke.types.containsAll(typeListFilter) -> {
+                    filteredList.add(poke)
+                }
             }
         }
 
         return filteredList
+    }
+
+    /**
+     * Determines if the [TypeFilter] is already applied to the list.
+     */
+    fun isFilterApplied(type: TypeFilter): Boolean {
+        return _currentTypeFiltering.contains(type)
     }
 }
