@@ -34,6 +34,16 @@ class PokemonListAdapter (private val viewModel: PokemonListViewModel) : ListAda
         fun bind(viewModel: PokemonListViewModel, item: Pokemon) {
             binding.viewModel = viewModel
             binding.pokemon = item
+
+            // gets the offset number for resourceid name. ex: 1 -> 001
+            val paddedNumber = binding.pokemon?.id.toString().padStart(3,'0')
+
+            // gets the drawable id for the sprite icon. Gets the R.drawable.* needed
+            val spriteIdentifier = binding.root.context.resources.getIdentifier("sprite_${paddedNumber}", "drawable", binding.root.context.packageName)
+
+            // assigns the sprite id to the ImageInfo needed for the view
+            binding.pokemon?.images?.spriteId =spriteIdentifier
+
             binding.executePendingBindings()
         }
 
