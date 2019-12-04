@@ -42,6 +42,7 @@ class PokemonListAdapter (private val viewModel: PokemonListViewModel) : ListAda
             val spriteIdentifier = binding.root.context.resources.getIdentifier("sprite_${paddedNumber}", "drawable", binding.root.context.packageName)
 
             // assigns the sprite id to the ImageInfo needed for the view
+            // needed to use ? for safe access notation in case item might have changed
             binding.pokemon?.images?.spriteId =spriteIdentifier
 
             binding.executePendingBindings()
