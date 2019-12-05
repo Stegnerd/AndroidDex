@@ -3,6 +3,7 @@ package com.stegner.androiddex.pokemonlist
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -93,13 +94,20 @@ class PokemonListFragment : DaggerFragment() {
             // menu is the menu from the view, since it was the anchor
             menuInflater.inflate(R.menu.filter_pokemon, menu)
 
+            // we need to set the icon for each item in the menu since that needs to be set programmatically
+            // Ex: if was checked before it will be in the list of the view model
+            // that way when we use the click listener, we pass the opposite or false
+            // https://stackoverflow.com/questions/6239163/android-checkable-menu-item
+            menu.children.toList().forEach {
+                it.isChecked = viewModel.isFilterApplied(Helpers.typeEnumFromId(it.itemId))
+            }
+
             // set a click listener for each item in the menu
             setOnMenuItemClickListener {
                 // helper method to get the enum value from the id clicked
-                viewModel.setTypeFiltering(Helpers.typeEnumFromId(it.itemId))
+                viewModel.setTypeFiltering(Helpers.typeEnumFromId(it.itemId), !it.isChecked)
                 // reload data now that filter has been applied
                 viewModel.loadPokemon()
-
                 // reset to top of list when item from filter has been selected
                 resetPositionToTop()
 

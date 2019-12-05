@@ -2,59 +2,79 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/type_filter_all"
-        android:title="@string/label_type_all"/>
+        android:title="@string/label_type_all"
+        android:checkable="true"
+        />
     <item
         android:id="@+id/type_filter_bug"
-        android:title="@string/label_type_bug"/>
+        android:title="@string/label_type_bug"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_electric"
-        android:title="@string/label_type_electric"/>
+        android:title="@string/label_type_electric"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_dark"
-        android:title="@string/label_type_dark"/>
+        android:title="@string/label_type_dark"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_dragon"
-        android:title="@string/label_type_dragon"/>
+        android:title="@string/label_type_dragon"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_fairy"
-        android:title="@string/label_type_fairy"/>
+        android:title="@string/label_type_fairy"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_fighting"
-        android:title="@string/label_type_fighting"/>
+        android:title="@string/label_type_fighting"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_fire"
-        android:title="@string/label_type_fire"/>
+        android:title="@string/label_type_fire"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_flying"
-        android:title="@string/label_type_flying"/>
+        android:title="@string/label_type_flying"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_ghost"
-        android:title="@string/label_type_ghost"/>
+        android:title="@string/label_type_ghost"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_grass"
-        android:title="@string/label_type_grass"/>
+        android:title="@string/label_type_grass"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_ground"
-        android:title="@string/label_type_ground"/>
+        android:title="@string/label_type_ground"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_ice"
-        android:title="@string/label_type_ice"/>
+        android:title="@string/label_type_ice"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_normal"
-        android:title="@string/label_type_normal"/>
+        android:title="@string/label_type_normal"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_poison"
-        android:title="@string/label_type_poison"/>
+        android:title="@string/label_type_poison"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_psychic"
-        android:title="@string/label_type_psychic"/>
+        android:title="@string/label_type_psychic"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_rock"
-        android:title="@string/label_type_rock"/>
+        android:title="@string/label_type_rock"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_steel"
-        android:title="@string/label_type_steel"/>
+        android:title="@string/label_type_steel"
+        android:checkable="true"/>
     <item
         android:id="@+id/type_filter_water"
-        android:title="@string/label_type_water"/>
+        android:title="@string/label_type_water"
+        android:checkable="true"/>
 </menu>

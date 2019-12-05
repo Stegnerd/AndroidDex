@@ -55,6 +55,16 @@ android {
         enabled = true
         enabledForTests = true
     }
+
+    sourceSets {
+        main {
+            res {
+                srcDir 'src/main/sprites'
+                srcDir 'src/main/thumbnails'
+                srcDir 'src/main/res'
+            }
+        }
+    }
 }
 
 dependencies {

@@ -4,6 +4,8 @@
     android:orientation="vertical">
 
     <data>
+        <import type="androidx.core.content.ContextCompat"/>
+
         <variable
             name="pokemon"
             type="com.stegner.androiddex.data.pokemon.Pokemon" />
@@ -25,30 +27,40 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
                 android:layout_gravity="center"
+                android:orientation="vertical"
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="16dp">
+
+                <!-- gets the drawable of the icon based on the viewmodel R.drawable.* -->
+                <ImageView
+                    android:id="@+id/pokemonSprite"
+                    android:contentDescription="@string/no_pokemon_image_name"
+                    android:src="@{ContextCompat.getDrawable(context, pokemon.images.spriteId)}"
+                    android:layout_height="48dp"
+                    android:layout_width="48dp"
+                    android:layout_gravity="center_horizontal"
+                    tools:src="@drawable/sprite_135"/>
 
                 <!-- Learning tip: you cannot use int as value for text, need to get string of it -->
                 <TextView
                     android:id="@+id/pokedexNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center_horizontal"
                     android:text="@{String.valueOf(pokemon.id)}"
-                    tools:text="123" />
+                    tools:text="135" />
 
                 <TextView
                     android:id="@+id/pokemonName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="2dp"
                     android:text="@{pokemon.names.english}"
-                    tools:text="Jolteon"/>
+                    tools:text="Jolteon" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

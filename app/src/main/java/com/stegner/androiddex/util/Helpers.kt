@@ -16,6 +16,7 @@ class Helpers {
                 R.id.type_filter_fire -> TypeFilter.Fire
                 R.id.type_filter_flying -> TypeFilter.Flying
                 R.id.type_filter_ghost -> TypeFilter.Ghost
+                R.id.type_filter_grass -> TypeFilter.Grass
                 R.id.type_filter_ground -> TypeFilter.Ground
                 R.id.type_filter_ice -> TypeFilter.Ice
                 R.id.type_filter_normal -> TypeFilter.Normal
