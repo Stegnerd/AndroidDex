@@ -58,11 +58,27 @@ android {
 
     sourceSets {
         main {
+            // Set folder locations for resources
             res {
                 srcDir 'src/main/sprites'
                 srcDir 'src/main/thumbnails'
                 srcDir 'src/main/res'
             }
+            // Added shared directory for testing
+            String sharedTestDir = 'src/sharedTest/java'
+            test {
+                java.srcDir sharedTestDir
+            }
+            androidTest {
+                java.srcDir sharedTestDir
+            }
+        }
+    }
+
+    testOptions {
+        unitTests {
+            // allows access to the res objects during testing
+            includeAndroidResources true
         }
     }
 }

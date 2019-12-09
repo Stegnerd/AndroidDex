@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.stegner.androiddex.R
 import com.stegner.androiddex.databinding.PokemonlistFragBinding
-import com.stegner.androiddex.util.GRID_COLUMN_COUNT
+import com.stegner.androiddex.util.Constants.Settings.GRID_COLUMN_COUNT
 import com.stegner.androiddex.util.Helpers
 import com.stegner.androiddex.util.ItemOffsetDecoration
 import dagger.android.support.DaggerFragment

@@ -7,9 +7,6 @@ import com.stegner.androiddex.data.Result.Success
 import com.stegner.androiddex.data.pokemon.Pokemon
 import com.stegner.androiddex.data.pokemon.datasource.PokemonDataSource
 import com.stegner.androiddex.dependencyinjection.ApplicationModule
-import com.stegner.androiddex.util.GET_POKEMON_BY_TYPE_ERROR
-import com.stegner.androiddex.util.GET_POKEMON_ERROR
-import com.stegner.androiddex.util.GET_POKEMON_LIST_ERROR
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -29,6 +26,9 @@ import javax.inject.Inject
  */
 class DefaultPokemonRepository @Inject constructor(@ApplicationModule.PokemonLocalDataSource private val pokemonLocalDataSource: PokemonDataSource, private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO): PokemonRepository {
 
+    // just an instance of this classes name for logging purposes
+    private val TAG by lazy { DefaultPokemonRepository::class.java.simpleName}
+
     override suspend fun getPokemon(): Result<List<Pokemon>> {
         return withContext(ioDispatcher) {
             val pokemonFromDatabase = fetchPokemonListFromDataSource()
@@ -46,26 +46,32 @@ class DefaultPokemonRepository @Inject constructor(@ApplicationModule.PokemonLoc
     private suspend fun fetchPokemonListFromDataSource(): Result<List<Pokemon>> {
         val pokemon = pokemonLocalDataSource.getPokemon()
 
-        return when(pokemon){
+        return when (pokemon){
             is Success -> pokemon
-            else -> Error(Exception(pokemon.toString()))
+            is Error -> {
+                Timber.e(TAG,"Failed to load all data from local data store.")
+                Error(Exception(pokemon.exception))
+            }
+            else -> throw IllegalStateException()
         }
     }
 
     override suspend fun getPokemon(pokedexId: Int): Result<Pokemon> {
 
         return withContext(ioDispatcher) {
-
             return@withContext fetchPokemonFromDataSource(pokedexId)
         }
     }
 
     private suspend fun fetchPokemonFromDataSource(pokemonId: Int): Result<Pokemon> {
         val pokemon = pokemonLocalDataSource.getPokemon(pokemonId)
-        return if(pokemon is Success){
-            pokemon
-        }else {
-            Error(Exception(pokemon.toString()))
+        return when(pokemon) {
+            is Success -> pokemon
+            is Error -> {
+                Timber.e(TAG, "Failed to load data from local data store by id.")
+                Error(Exception(pokemon.exception))
+            }
+            else -> throw IllegalStateException()
         }
     }
 
@@ -101,10 +107,13 @@ class DefaultPokemonRepository @Inject constructor(@ApplicationModule.PokemonLoc
             pokemonLocalDataSource.getPokemonByType(typeOne)
         }
 
-        return if(pokemon is Success){
-            pokemon
-        }else {
-            Error(Exception(pokemon.toString()))
+        return when(pokemon) {
+            is Success -> pokemon
+            is Error -> {
+                Timber.e(TAG, "Failed to load data from local data store by type.")
+                Error(Exception(pokemon.exception))
+            }
+            else -> throw IllegalStateException()
         }
     }
 
@@ -121,11 +130,15 @@ class DefaultPokemonRepository @Inject constructor(@ApplicationModule.PokemonLoc
     }
 
     private suspend fun fetchPokemonListFRomDataSourceByGeneration(generation: Int): Result<List<Pokemon>>{
-        val pokemonFromDatabase = pokemonLocalDataSource.getPokemonByGen(generation)
-        return if(pokemonFromDatabase is Success){
-            pokemonFromDatabase
-        }else {
-            Error(Exception(pokemonLocalDataSource.toString()))
+        val pokemon = pokemonLocalDataSource.getPokemonByGen(generation)
+
+        return when(pokemon) {
+            is Success -> pokemon
+            is Error -> {
+                Timber.e(TAG, "Failed to load data from local data store by generation.")
+                Error(Exception(pokemon.exception))
+            }
+            else -> throw IllegalStateException()
         }
     }
 
