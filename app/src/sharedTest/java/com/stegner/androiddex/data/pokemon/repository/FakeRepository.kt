@@ -9,6 +9,9 @@ import com.stegner.androiddex.util.Constants.Errors.GET_POKEMON_BY_TYPE_ERROR
 import com.stegner.androiddex.util.Constants.Errors.GET_POKEMON_ERROR
 import com.stegner.androiddex.util.Constants.Errors.GET_POKEMON_LIST_ERROR
 
+/**
+ * Implementation of a remote data source with static access to the data for easy testing
+ */
 class FakeRepository : PokemonRepository {
 
     // Temporary holder of data during tests
