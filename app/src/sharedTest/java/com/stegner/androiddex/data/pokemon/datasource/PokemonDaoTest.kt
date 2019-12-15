@@ -1,5 +1,6 @@
 package com.stegner.androiddex.data.pokemon.datasource
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -7,12 +8,15 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.stegner.androiddex.MainCoroutineRule
 import com.stegner.androiddex.data.pokemon.Pokemon
 import com.stegner.androiddex.data.pokemon.PokemonDatabase
 import com.stegner.androiddex.dependencyinjection.workers.DataBaseSeedWorker
-import com.stegner.androiddex.util.TypeFilter.*
 import com.stegner.androiddex.util.GenerationFilterType.*
+import com.stegner.androiddex.util.TestSeedWorker
+import com.stegner.androiddex.util.TypeFilter.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -22,8 +26,21 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+
 /**
  * Unit tests of the dao
+ *
+ * ExperimentalCoroutinesApi - Marks declarations that are still experimental in coroutines API,
+ *                              which means that the design of the corresponding declarations has open
+ *                              issues which may (or may not) lead to their changes in the future.
+ *                              Roughly speaking, there is a chance that those declarations will be
+ *                              deprecated in the near future or the semantics of their behavior may
+ *                              change in some way that may break some code.
+ *
+ *   @get - kotlin getter access
+ *   junit rule - Rules allow very flexible addition or redefinition of the behavior of each test
+ *                method in a test class.
+ *
  */
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -31,31 +48,34 @@ class PokemonDaoTest {
 
     private lateinit var database: PokemonDatabase
 
-    /*
+    // switches coroutine scope to [TestCoroutineScope]. So we can more easily control the flow of
+    // coroutines
+    @ExperimentalCoroutinesApi
     @get:Rule
-    var instantExecutorRule*/
+    var mainCoroutineRule = MainCoroutineRule()
 
+    // makes asynchronous code run synchronously
+    @get:Rule
+    var instantExecutorRule = InstantTaskExecutorRule()
+
+    // Before running the test create the database and seed it
     @Before
-    fun initDatabase() {
-        // using an in-memory database because the information stored here disappears when the
-        // process is killed
-        database =
-            Room.inMemoryDatabaseBuilder(getApplicationContext(), PokemonDatabase::class.java)
-                .addCallback(object : RoomDatabase.Callback() {
-                    override fun onCreate(db: SupportSQLiteDatabase) {
-                        super.onCreate(db)
-                        val request = OneTimeWorkRequestBuilder<DataBaseSeedWorker>().build()
-                        WorkManager.getInstance(getApplicationContext()).enqueue(request)
-                    }
-                })
-                .allowMainThreadQueries().build()
+    fun initDb() {
+        database = Room.inMemoryDatabaseBuilder(getApplicationContext(), PokemonDatabase::class.java).allowMainThreadQueries().build()
+
+        // seed the database
+        val worker = TestSeedWorker(getApplicationContext(), database)
+        runBlocking {
+            worker.seed()
+        }
     }
 
+    // after all tests are done tear down the database
     @After
     fun closeDb() = database.close()
 
     @Test
-    fun getPokemonListAll() = runBlockingTest {
+    fun getPokemon_ReturnsListAll_WhenNoFilter() = runBlockingTest {
         // GIVEN - no filter provided
 
         // WHEN - Get all pokemon
@@ -67,7 +87,7 @@ class PokemonDaoTest {
     }
 
     @Test
-    fun getPokemonById() = runBlockingTest {
+    fun getPokemonById_ReturnsExpectedPokemon_WhenGivenId() = runBlockingTest {
         // GIVEN - pokedex lookup id
         val pokedexId = 135
 
@@ -81,9 +101,8 @@ class PokemonDaoTest {
         assertThat(pokemon?.types, hasItem("Electric"))
     }
 
-
     @Test
-    fun getPokemonListBug() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListBug_WhenGivenFilterTypeBug() = runBlockingTest {
         // GIVEN - type filter is bug
         val type = Bug
 
@@ -96,7 +115,7 @@ class PokemonDaoTest {
     }
 
     @Test
-    fun getPokemonListDark() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListDark_WhenGivenFilterTypeDark() = runBlockingTest {
         // GIVEN - type filter is dark
         val type = Dark
 
@@ -105,11 +124,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all dark pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(56))
+        assertThat(pokemon?.count(), `is`(46))
     }
 
     @Test
-    fun getPokemonListDragon() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListDragon_WhenGivenFilterTypeDragon() = runBlockingTest {
         // GIVEN - type filter is dragon
         val type = Dragon
 
@@ -118,11 +137,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all dragon pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(44))
+        assertThat(pokemon?.count(), `is`(45))
     }
 
     @Test
-    fun getPokemonListElectric() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListElectric_WhenGivenFilterTypeElectric() = runBlockingTest {
         // GIVEN - type filter is Electric
         val type = Electric
 
@@ -131,11 +150,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Electric pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(52))
+        assertThat(pokemon?.count(), `is`(48))
     }
 
     @Test
-    fun getPokemonListFairy() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListFairy_GivenFilterTypeFairy() = runBlockingTest {
         // GIVEN - type filter is Fairy
         val type = Fairy
 
@@ -144,11 +163,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Fairy pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(51))
+        assertThat(pokemon?.count(), `is`(47))
     }
 
     @Test
-    fun getPokemonListFighting() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListFighting_GivenFilterTypeFighting() = runBlockingTest {
         // GIVEN - type filter is Fighting
         val type = Fighting
 
@@ -157,11 +176,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Fighting pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(57))
+        assertThat(pokemon?.count(), `is`(54))
     }
 
     @Test
-    fun getPokemonListFire() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListFire_GivenFilterTypeFire() = runBlockingTest {
         // GIVEN - type filter is Fire
         val type = Fire
 
@@ -170,11 +189,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Fire pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(67))
+        assertThat(pokemon?.count(), `is`(64))
     }
 
     @Test
-    fun getPokemonListFlying() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListFlying_GivenFilterTypeFlying() = runBlockingTest {
         // GIVEN - type filter is Flying
         val type = Flying
 
@@ -183,11 +202,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Flying pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(104))
+        assertThat(pokemon?.count(), `is`(98))
     }
 
     @Test
-    fun getPokemonListGhost() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListGhost_GivenFilterTypeGhost() = runBlockingTest {
         // GIVEN - type filter is Ghost
         val type = Ghost
 
@@ -196,11 +215,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Ghost pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(44))
+        assertThat(pokemon?.count(), `is`(43))
     }
 
     @Test
-    fun getPokemonListGrass() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListGrass_GivenFilterTypeGrass() = runBlockingTest {
         // GIVEN - type filter is Grass
         val type = Grass
 
@@ -209,11 +228,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Grass pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(98))
+        assertThat(pokemon?.count(), `is`(97))
     }
 
     @Test
-    fun getPokemonListGround() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListGround_GivenFilterTypeGround() = runBlockingTest {
         // GIVEN - type filter is Ground
         val type = Ground
 
@@ -222,11 +241,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Ground pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(66))
+        assertThat(pokemon?.count(), `is`(64))
     }
 
     @Test
-    fun getPokemonListIce() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListIce_GivenFilterTypeIce() = runBlockingTest {
         // GIVEN - type filter is Ice
         val type = Ice
 
@@ -235,11 +254,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Ice pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(43))
+        assertThat(pokemon?.count(), `is`(34))
     }
 
     @Test
-    fun getPokemonListNormal() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListNormal_GivenFilterTypeNormal() = runBlockingTest {
         // GIVEN - type filter is Normal
         val type = Normal
 
@@ -248,11 +267,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Normal pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(117))
+        assertThat(pokemon?.count(), `is`(109))
     }
 
     @Test
-    fun getPokemonListPoison() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListPoison_GivenFilterTypePoison() = runBlockingTest {
         // GIVEN - type filter is Poison
         val type = Poison
 
@@ -261,11 +280,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Poison pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(64))
+        assertThat(pokemon?.count(), `is`(66))
     }
 
     @Test
-    fun getPokemonListPsychic() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListPsychic_FilterTypePsychic() = runBlockingTest {
         // GIVEN - type filter is Psychic
         val type = Psychic
 
@@ -274,11 +293,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Psychic pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(88))
+        assertThat(pokemon?.count(), `is`(82))
     }
 
     @Test
-    fun getPokemonListRock() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListRock_GivenFilterTypeRock() = runBlockingTest {
         // GIVEN - type filter is Rock
         val type = Rock
 
@@ -287,11 +306,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Rock pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(59))
+        assertThat(pokemon?.count(), `is`(60))
     }
 
     @Test
-    fun getPokemonListSteel() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListSteel_GivenFilterTypeSteel() = runBlockingTest {
         // GIVEN - type filter is Steel
         val type = Steel
 
@@ -300,11 +319,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Steel pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(57))
+        assertThat(pokemon?.count(), `is`(49))
     }
 
     @Test
-    fun getPokemonListWater() = runBlockingTest {
+    fun getPokemonByType_ReturnsPokemonListWater_GivenFilterTypeWater() = runBlockingTest {
         // GIVEN - type filter is Water
         val type = Water
 
@@ -313,11 +332,11 @@ class PokemonDaoTest {
 
         // THEN -- the loaded data contains all Water pokemon.
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(133))
+        assertThat(pokemon?.count(), `is`(131))
     }
 
     @Test
-    fun getPokemonListGenerationKanto() = runBlockingTest {
+    fun getPokemonByGeneration_ReturnsPokemonListGenerationKanto_GivenGenerationFilterKanto() = runBlockingTest {
         // GIVEN - Generation filter is
         val gen = KANTO
 
@@ -330,7 +349,7 @@ class PokemonDaoTest {
     }
 
     @Test
-    fun getPokemonListGenerationJhoto() = runBlockingTest {
+    fun getPokemonByGeneration_ReturnsPokemonListGenerationJhoto_GivenGenerationFilterJhoto() = runBlockingTest {
         // GIVEN - Generation filter is
         val gen = JHOTO
 
@@ -343,7 +362,7 @@ class PokemonDaoTest {
     }
 
     @Test
-    fun getPokemonListGenerationHoenn() = runBlockingTest {
+    fun getPokemonByGeneration_ReturnsPokemonListGenerationHoenn_GivenGenerationFilterHoenn() = runBlockingTest {
         // GIVEN - Generation filter is
         val gen = HOENN
 
@@ -356,7 +375,7 @@ class PokemonDaoTest {
     }
 
     @Test
-    fun getPokemonListGenerationSinnoh() = runBlockingTest {
+    fun getPokemonByGeneration_ReturnsPokemonListGenerationSinnoh_GivenGenerationFilterSinnoh() = runBlockingTest {
         // GIVEN - Generation filter is
         val gen = SINNOH
 
@@ -365,11 +384,11 @@ class PokemonDaoTest {
 
         //Then - the loaded data contains all   generation pokemon
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(107))
+        assertThat(pokemon?.count(), `is`(108))
     }
 
     @Test
-    fun getPokemonListGenerationUnova() = runBlockingTest {
+    fun getPokemonByGeneration_ReturnsPokemonListGenerationUnova_GivenGenerationFilterUnova() = runBlockingTest {
         // GIVEN - Generation filter is
         val gen = UNOVA
 
@@ -378,11 +397,11 @@ class PokemonDaoTest {
 
         //Then - the loaded data contains all   generation pokemon
         assertThat<List<Pokemon>>(pokemon, notNullValue())
-        assertThat(pokemon?.count(), `is`(156))
+        assertThat(pokemon?.count(), `is`(155))
     }
 
     @Test
-    fun getPokemonListGenerationKalos() = runBlockingTest {
+    fun getPokemonByGeneration_ReturnsPokemonListGenerationKalos_GivenGenerationFilterKalos() = runBlockingTest {
         // GIVEN - Generation filter is
         val gen = KALOS
 
@@ -395,7 +414,7 @@ class PokemonDaoTest {
     }
 
     @Test
-    fun getPokemonListGenerationAlola() = runBlockingTest {
+    fun getPokemonByGeneration_ReturnsPokemonListGenerationAlola_GivenGenerationFilterAlola() = runBlockingTest {
         // GIVEN - Generation filter is
         val gen = ALOLA
 

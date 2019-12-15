@@ -32,7 +32,7 @@ interface PokemonDao {
      *
      * @return the pokemons with the given types
      */
-    @Query("SELECT * FROM Pokemon WHERE type LIKE  :typeOne")
+    @Query("SELECT * FROM Pokemon WHERE type LIKE '%' || :typeOne || '%'")
     suspend fun getPokemonByType(typeOne: String): List<Pokemon>?
 
     /**
@@ -42,7 +42,7 @@ interface PokemonDao {
      *
      * @return the pokemons with the given types
      */
-    @Query("SELECT * FROM Pokemon WHERE type LIKE :typeOne AND :typeTwo")
+    @Query("SELECT * FROM Pokemon WHERE type LIKE  '%' || :typeOne || '%' AND  type LIKE '%' || :typeTwo || '%' ")
     suspend fun getPokemonByType(typeOne: String, typeTwo: String): List<Pokemon>?
 
     /**

@@ -4,6 +4,7 @@ import android.content.Context
 import com.stegner.androiddex.data.pokemon.repository.PokemonRepository
 import com.stegner.androiddex.dependencyinjection.PokemonListModule
 import com.stegner.androiddex.dependencyinjection.ViewModelFactoryModule
+import com.stegner.androiddex.dependencyinjection.workers.WorkerModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -18,7 +19,8 @@ import javax.inject.Singleton
         TestApplicationModule::class,
         AndroidSupportInjectionModule::class,
         ViewModelFactoryModule::class,
-        PokemonListModule::class])
+        PokemonListModule::class,
+        WorkerModule::class])
 interface TestApplicationComponent : AndroidInjector<TestAndroiddexApplication> {
 
     @Component.Factory

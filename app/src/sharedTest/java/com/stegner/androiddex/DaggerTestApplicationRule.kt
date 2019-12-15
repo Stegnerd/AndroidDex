@@ -10,7 +10,7 @@ import org.junit.runner.Description
  *
  * Note that the `testInstrumentationRunner` property needs to point to [CustomTestRunner].
  */
-class DaggerTestApplicationRule : TestWatcher() {
+class DaggerTestApplicationRule : TestWatcher(){
 
     lateinit var component: TestApplicationComponent
         private set

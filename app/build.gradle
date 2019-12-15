@@ -88,9 +88,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // TODO MAYBE NOT NEEDED
-    // implementation 'androidx.core:core-ktx:1.0.2'\
-    // androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+
 
     //////////////////////
     // App dependencies //
@@ -105,19 +103,31 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timberVersion" // Logging/ Debugging library
     implementation "androidx.work:work-runtime-ktx:$workVersion" // WorkManager API to schedule deferrable, asynchronous tasks that must be run reliably
 
+    ////////////////////////////
+    // Debugging Dependencies //
+    ////////////////////////////
+    debugImplementation "com.amitshekhar.android:debug-db:$debugDBVersion" // exposes port for viewing sqllite db in browser when debugging
+    debugImplementation "com.amitshekhar.android:debug-db-encrypt:$debugDBVersion" // encrypted version
+
     ///////////////////////////////
     // Architecture dependencies //
     //////////////////////////////
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion" // ConstraintLayout for Android
-    implementation "androidx.room:room-runtime:$roomVersion" // sqllite wrapper
-    kapt "androidx.room:room-compiler:$roomVersion" // annotation processor for room
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion" // ViewModel and LiveData
+    implementation "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion" // annotation processor if using Java8, use the following instead of lifecycle-compiler
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion" // Builds upon navigation-runtime and provides out-of-the-box support for fragments as destination
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion" // allows you to easily add navigation drawers, menus and bottom navigation to your app consistent with the Material Design guidelines
+    kapt "androidx.room:room-compiler:$roomVersion" // annotation processor for room
     implementation "androidx.room:room-ktx:$roomVersion"// Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-runtime:$roomVersion" // sqllite wrapper
 
     ///////////////////////////////////////
     // Dependencies for local unit tests //
     ///////////////////////////////////////
+    // This artifact provides InstantTaskExecutorRule. That can be used from JUnit-based tests to
+    // replace the Architecture Components’ standard Executor with one that runs everything on the
+    // current thread. This turns formerly asynchronous operations into synchronous ones, which streamlines testing
+    testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
     testImplementation "androidx.test.espresso:espresso-core:$espressoVersion" // Contains core and basic View matchers, actions, and assertions. See Basics and Recipes
     testImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion" // External contributions that contain DatePicker, RecyclerView and Drawer actions, accessibility checks, and CountingIdlingResource
     testImplementation "androidx.test.espresso:espresso-intents:$espressoVersion" // Extension to validate and stub intents for hermetic testing
@@ -143,6 +153,10 @@ dependencies {
     ///////////////////////////////////////////
     // Androidx Test -- Instrumented testing //
     ///////////////////////////////////////////
+    // This artifact provides InstantTaskExecutorRule. That can be used from JUnit-based tests to
+    // replace the Architecture Components’ standard Executor with one that runs everything on the
+    // current thread. This turns formerly asynchronous operations into synchronous ones, which streamlines testing
+    androidTestImplementation "androidx.arch.core:core-testing:$archTestingVersion"
     androidTestImplementation "androidx.test:core-ktx:$androidXTestCoreVersion" // Android jetback for kotlin
     androidTestImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
     androidTestImplementation "androidx.test:rules:$androidXTestRulesVersion"  //JUnit Rules
