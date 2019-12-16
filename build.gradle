@@ -1,20 +1,16 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.3.60'
-    ext.junit5Plugin_Version = '1.5.2.0'
-    ext.navigationVersion = '2.2.0-rc02'
+    ext.kotlin_version = '1.3.61'
+    ext.navigationVersion = '2.2.0-rc03'
     repositories {
         google()
         jcenter()
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.2'
+        classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // JUnit5 plugin
-        classpath "de.mannodermaus.gradle.plugins:android-junit5:$junit5Plugin_Version"
     }
 }
 
@@ -22,7 +18,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
     }
 }
 
@@ -36,19 +31,26 @@ ext {
     compileSdkVersion = 29
 
     // App dependencies
-    androidxTestRunnerVersion = '1.2.0'
+    androidXTestCoreVersion = '1.2.0'
+    androidXTestExtKotlinRunnerVersion = '1.1.1'
+    androidXTestRulesVersion = '1.2.0-beta01'
     appCompatVersion = '1.1.0'
+    archLifecycleVersion = '2.2.0-rc03'
+    archTestingVersion = '2.0.0'
     cardViewVersion = '1.0.0'
     constraintLayoutVersion = '1.1.3'
     coroutinesVersion = '1.2.1'
     daggerVersion = '2.23.2'
+    debugDBVersion = '1.0.6'
     espressoVersion = '3.2.0'
     fragmentKtxVersion = '1.2.0-rc02'
     gsonVersion = '2.8.6'
-    junitVersion = '5.5.2'
+    hamcrestVersion = '1.3'
+    junitVersion = '4.12'
     mannodermausJunitVersion = '1.1.0'
     recyclerViewVersion = '1.1.0'
     roomVersion = '2.2.2'
     timberVersion = '4.7.1'
+    truthVersion = '0.44'
     workVersion = '2.2.0'
 }

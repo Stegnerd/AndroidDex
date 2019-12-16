@@ -10,7 +10,7 @@ import timber.log.Timber
 import timber.log.Timber.DebugTree
 import javax.inject.Inject
 
-class AndroidDexApplication : DaggerApplication() {
+open class AndroidDexApplication : DaggerApplication() {
 
     // Our custom worker factory that will override default behavior
     @Inject lateinit var daggerAwareWorkerFactory: DaggerAwareWorkerFactory

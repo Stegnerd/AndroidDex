@@ -5,10 +5,10 @@ import com.stegner.androiddex.data.Result.Error
 import com.stegner.androiddex.data.Result.Success
 import com.stegner.androiddex.data.pokemon.Pokemon
 import com.stegner.androiddex.data.pokemon.PokemonDao
-import com.stegner.androiddex.util.GET_POKEMON_BY_GENERATION_ERROR
-import com.stegner.androiddex.util.GET_POKEMON_BY_TYPE_ERROR
-import com.stegner.androiddex.util.GET_POKEMON_ERROR
-import com.stegner.androiddex.util.GET_POKEMON_LIST_ERROR
+import com.stegner.androiddex.util.Constants.Errors.GET_POKEMON_BY_GENERATION_ERROR
+import com.stegner.androiddex.util.Constants.Errors.GET_POKEMON_BY_TYPE_ERROR
+import com.stegner.androiddex.util.Constants.Errors.GET_POKEMON_ERROR
+import com.stegner.androiddex.util.Constants.Errors.GET_POKEMON_LIST_ERROR
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,11 +19,13 @@ import timber.log.Timber
  */
 class PokemonLocalDataSource internal constructor(private val pokemonDao: PokemonDao, private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : PokemonDataSource {
 
+    private val TAG by lazy { PokemonLocalDataSource::class.java.simpleName}
+
     override suspend fun getPokemon(): Result<List<Pokemon>>  = withContext(ioDispatcher){
         return@withContext try {
             Success(pokemonDao.getPokemon())
         }catch (e: Exception){
-            Timber.e(e, e.message)
+            Timber.e(TAG, e, e.message)
             Error(Exception(GET_POKEMON_LIST_ERROR))
         }
     }
@@ -34,7 +36,7 @@ class PokemonLocalDataSource internal constructor(private val pokemonDao: Pokemo
             if(pokemon != null){
                 return@withContext Success(pokemon)
             }else {
-                Timber.e(GET_POKEMON_ERROR)
+                Timber.w(TAG,"Dao returned no pokemon.")
                 return@withContext Error(Exception("$GET_POKEMON_ERROR $pokedexId"))
             }
 
@@ -50,13 +52,13 @@ class PokemonLocalDataSource internal constructor(private val pokemonDao: Pokemo
             if(pokemon != null){
                 return@withContext Success(pokemon)
             }else {
-                Timber.e("$GET_POKEMON_BY_TYPE_ERROR $type")
+                Timber.w(TAG, "Dao returned no pokemon.")
                 return@withContext Error(Exception("$GET_POKEMON_BY_TYPE_ERROR $type"))
             }
 
         }catch (e: Exception) {
-            Timber.e(e, e.message)
-            return@withContext Error(e)
+            Timber.e(TAG, e, e.message)
+            return@withContext Error(Exception("$GET_POKEMON_BY_TYPE_ERROR $type"))
         }
     }
 
@@ -66,12 +68,12 @@ class PokemonLocalDataSource internal constructor(private val pokemonDao: Pokemo
             if(pokemon != null) {
                 return@withContext Success(pokemon)
             }else {
-                Timber.e("$GET_POKEMON_BY_TYPE_ERROR $typeOne, $typeTwo")
+                Timber.w(TAG, "Dao returned no pokemon.")
                 return@withContext Error(Exception("$GET_POKEMON_BY_TYPE_ERROR $typeOne, $typeTwo"))
             }
 
         }catch (e: Exception) {
-            Timber.e(e, e.message)
+            Timber.e(TAG, e, e.message)
             return@withContext Error(Exception("$GET_POKEMON_BY_TYPE_ERROR $typeOne, $typeTwo"))
         }
     }
@@ -82,11 +84,11 @@ class PokemonLocalDataSource internal constructor(private val pokemonDao: Pokemo
             if(pokemon != null){
                 return@withContext Success(pokemon)
             }else {
-                Timber.e("$GET_POKEMON_BY_GENERATION_ERROR $generation")
+                Timber.w(TAG, "Dao returned no pokemon.")
                 return@withContext Error(Exception("$GET_POKEMON_BY_GENERATION_ERROR $generation"))
             }
         }catch (e: Exception){
-            Timber.e(e, e.message)
+            Timber.e(TAG, e, e.message)
             return@withContext Error(Exception("$GET_POKEMON_BY_GENERATION_ERROR $generation"))
         }
     }

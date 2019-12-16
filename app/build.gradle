@@ -4,9 +4,6 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-// JUnit 5 plugin
-apply plugin: 'de.mannodermaus.android-junit5'
-
 // Kotlin Annotation processor
 apply plugin: 'kotlin-kapt'
 
@@ -18,9 +15,9 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        // Connect JUnit 5 to the runner
-        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
+
+        // Set Instrument tests to run with mock application instead
+        testInstrumentationRunner "com.stegner.androiddex.CustomTestRunner"
     }
 
     // Java 8 is required for JUnit 5
@@ -58,10 +55,31 @@ android {
 
     sourceSets {
         main {
+            // Set folder locations for resources
             res {
                 srcDir 'src/main/sprites'
                 srcDir 'src/main/thumbnails'
                 srcDir 'src/main/res'
+            }
+            // Added shared directory for testing
+            String sharedTestDir = 'src/sharedTest/java'
+            test {
+                java.srcDir sharedTestDir
+            }
+            androidTest {
+                java.srcDir sharedTestDir
+            }
+        }
+    }
+
+    testOptions.unitTests {
+        // allows access to the res objects during testing
+        includeAndroidResources = true
+
+        // Always show the result of every unit test, even if it passes.
+        all {
+            testLogging {
+                events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
             }
         }
     }
@@ -70,9 +88,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // TODO MAYBE NOT NEEDED
-    // implementation 'androidx.core:core-ktx:1.0.2'\
-    // androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+
 
     //////////////////////
     // App dependencies //
@@ -81,45 +97,75 @@ dependencies {
     implementation "androidx.cardview:cardview:$cardViewVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion" // Provides Dispatchers.Main context for Android applications
     implementation "com.google.code.gson:gson:$gsonVersion" // JSON library from google
-    implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion" // Allows use of recyclerView in layouts
+    implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"// Allows use of recyclerView in layouts
     implementation "androidx.room:room-runtime:$roomVersion" // sqllite wrapper
     kapt "androidx.room:room-compiler:$roomVersion" // annotation processor for room
     implementation "com.jakewharton.timber:timber:$timberVersion" // Logging/ Debugging library
     implementation "androidx.work:work-runtime-ktx:$workVersion" // WorkManager API to schedule deferrable, asynchronous tasks that must be run reliably
 
+
+    ////////////////////////////
+    // Debugging Dependencies //
+    ////////////////////////////
+    debugImplementation "com.amitshekhar.android:debug-db:$debugDBVersion" // exposes port for viewing sqllite db in browser when debugging
+    debugImplementation "com.amitshekhar.android:debug-db-encrypt:$debugDBVersion" // encrypted version
+
     ///////////////////////////////
     // Architecture dependencies //
     //////////////////////////////
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion" // ConstraintLayout for Android
-    implementation "androidx.room:room-runtime:$roomVersion" // sqllite wrapper
-    kapt "androidx.room:room-compiler:$roomVersion" // annotation processor for room
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion" // ViewModel and LiveData
+    implementation "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion" // annotation processor if using Java8, use the following instead of lifecycle-compiler
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion" // Builds upon navigation-runtime and provides out-of-the-box support for fragments as destination
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion" // allows you to easily add navigation drawers, menus and bottom navigation to your app consistent with the Material Design guidelines
-    implementation "androidx.room:room-ktx:$roomVersion" // Kotlin Extensions and Coroutines support for Room
+    kapt "androidx.room:room-compiler:$roomVersion" // annotation processor for room
+    implementation "androidx.room:room-ktx:$roomVersion"// Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-runtime:$roomVersion" // sqllite wrapper
 
     ///////////////////////////////////////
     // Dependencies for local unit tests //
     ///////////////////////////////////////
+    // This artifact provides InstantTaskExecutorRule. That can be used from JUnit-based tests to
+    // replace the Architecture Components’ standard Executor with one that runs everything on the
+    // current thread. This turns formerly asynchronous operations into synchronous ones, which streamlines testing
+    testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
+    testImplementation "androidx.test.espresso:espresso-core:$espressoVersion" // Contains core and basic View matchers, actions, and assertions. See Basics and Recipes
+    testImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion" // External contributions that contain DatePicker, RecyclerView and Drawer actions, accessibility checks, and CountingIdlingResource
+    testImplementation "androidx.test.espresso:espresso-intents:$espressoVersion" // Extension to validate and stub intents for hermetic testing
+    testImplementation "com.google.truth:truth:$truthVersion"
+    testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion" // Matchers that can be combined to create flexible expressions of intent
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
-    // (required)
-    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion" // JUnit Jupiter API for writing tests.
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion" // JUnit Jupiter test engine implementation, only required at runtime.
-    // (optional)
-    testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion" // parameterized tests
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion" // This package provides testing utilities for effectively testing coroutines
+    testImplementation "junit:junit:$junitVersion" // Testing library
 
     ////////////////////////////////////////////////////////////////
     // Dependencies for Android unit tests - Instrumented testing //
     ////////////////////////////////////////////////////////////////
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion" //Contains core and basic View matchers, actions, and assertions. See Basics and Recipes
     androidTestImplementation "androidx.work:work-testing:$workVersion" // Testing library provides a way to manually initialize WorkManager for tests
-    // Jupiter API & Test Runner, if you don't have it already
-    androidTestImplementation "androidx.test:runner:$androidxTestRunnerVersion"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
-    androidTestImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion" // JUnit Jupiter API for writing tests.
-    // Instrumentation test companion libraries for junit 5
-    androidTestImplementation "de.mannodermaus.junit5:android-test-core:$mannodermausJunitVersion"
-    androidTestRuntimeOnly "de.mannodermaus.junit5:android-test-runner:$mannodermausJunitVersion"
+    androidTestImplementation "junit:junit:$junitVersion" // Testing library
+
+    /////////////////////////////////
+    // Androidx Test - JVM Testing //
+    ////////////////////////////////
+    testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion" // Android jetback for kotlin
+    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
+    testImplementation "androidx.test:rules:$androidXTestRulesVersion" // JUnit Rules
+
+    ///////////////////////////////////////////
+    // Androidx Test -- Instrumented testing //
+    ///////////////////////////////////////////
+    // This artifact provides InstantTaskExecutorRule. That can be used from JUnit-based tests to
+    // replace the Architecture Components’ standard Executor with one that runs everything on the
+    // current thread. This turns formerly asynchronous operations into synchronous ones, which streamlines testing
+    androidTestImplementation "androidx.arch.core:core-testing:$archTestingVersion"
+    androidTestImplementation "androidx.test:core-ktx:$androidXTestCoreVersion" // Android jetback for kotlin
+    androidTestImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
+    androidTestImplementation "androidx.test:rules:$androidXTestRulesVersion"  //JUnit Rules
+    androidTestImplementation "androidx.room:room-testing:$roomVersion" // A class that can be used in your Instrumentation tests that can create the database in an older schema.
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion" //Contains core and basic View matchers, actions, and assertions. See Basics and Recipes
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion" // External contributions that contain DatePicker, RecyclerView and Drawer actions, accessibility checks, and CountingIdlingResource
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion" // Extension to validate and stub intents for hermetic testing
 
     ////////////////////////////////////////////////////////////////////////
     // Resolve conflicts between main and test apk - MIGHT NOT NEED THIS //
@@ -138,10 +184,13 @@ dependencies {
     // Dagger //
     ///////////
     implementation "com.google.dagger:dagger:$daggerVersion" // A fast dependency injector for Android and Java
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion" // Tools to generate Dagger injection and module adapters from annotated code and validate them
-    implementation "com.google.dagger:dagger-android-support:$daggerVersion" // Support libraries for android/dagger
-    kapt "com.google.dagger:dagger-android-processor:$daggerVersion" // Annotation processor for dagger
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    // Tools to generate Dagger injection and module adapters from annotated code and validate them
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    // Support libraries for android/dagger
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+    // Annotation processor for dagger
     // Using dagger for tests as well
-    kaptAndroidTest "com.google.dagger:dagger-compile:$daggerVersion"
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
     kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
 }

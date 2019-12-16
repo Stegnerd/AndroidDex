@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.stegner.androiddex.data.pokemon.Pokemon
 import com.stegner.androiddex.data.pokemon.PokemonDatabase
-import com.stegner.androiddex.util.POKEMON_FILE_NAME
+import com.stegner.androiddex.util.Constants.Assests.POKEMON_FILE_NAME
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 import javax.inject.Provider
