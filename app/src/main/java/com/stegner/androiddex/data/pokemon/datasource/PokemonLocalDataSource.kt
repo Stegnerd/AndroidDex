@@ -41,7 +41,7 @@ class PokemonLocalDataSource internal constructor(private val pokemonDao: Pokemo
             }
 
         } catch (e: Exception){
-            Timber.e(TAG, e, e.message)
+            Timber.e(e, e.message)
             return@withContext Error(Exception("$GET_POKEMON_ERROR $pokedexId"))
         }
     }

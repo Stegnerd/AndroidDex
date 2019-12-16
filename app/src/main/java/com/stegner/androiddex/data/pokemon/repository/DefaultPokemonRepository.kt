@@ -119,7 +119,7 @@ class DefaultPokemonRepository @Inject constructor(@ApplicationModule.PokemonLoc
 
     override suspend fun getPokemonByGeneration(generation: Int): Result<List<Pokemon>> {
         return withContext(ioDispatcher) {
-            val pokemonFromDatabase = fetchPokemonListFRomDataSourceByGeneration(generation)
+            val pokemonFromDatabase = fetchPokemonListFromDataSourceByGeneration(generation)
 
             (pokemonFromDatabase as? Success)?.let { list ->
                 return@withContext Success(list.data.sortedBy { it.id })
@@ -129,7 +129,7 @@ class DefaultPokemonRepository @Inject constructor(@ApplicationModule.PokemonLoc
         }
     }
 
-    private suspend fun fetchPokemonListFRomDataSourceByGeneration(generation: Int): Result<List<Pokemon>>{
+    private suspend fun fetchPokemonListFromDataSourceByGeneration(generation: Int): Result<List<Pokemon>>{
         val pokemon = pokemonLocalDataSource.getPokemonByGen(generation)
 
         return when(pokemon) {

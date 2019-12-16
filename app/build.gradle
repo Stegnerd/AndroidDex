@@ -103,6 +103,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timberVersion" // Logging/ Debugging library
     implementation "androidx.work:work-runtime-ktx:$workVersion" // WorkManager API to schedule deferrable, asynchronous tasks that must be run reliably
 
+
     ////////////////////////////
     // Debugging Dependencies //
     ////////////////////////////
@@ -131,6 +132,7 @@ dependencies {
     testImplementation "androidx.test.espresso:espresso-core:$espressoVersion" // Contains core and basic View matchers, actions, and assertions. See Basics and Recipes
     testImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion" // External contributions that contain DatePicker, RecyclerView and Drawer actions, accessibility checks, and CountingIdlingResource
     testImplementation "androidx.test.espresso:espresso-intents:$espressoVersion" // Extension to validate and stub intents for hermetic testing
+    testImplementation "com.google.truth:truth:$truthVersion"
     testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion" // Matchers that can be combined to create flexible expressions of intent
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion" // This package provides testing utilities for effectively testing coroutines
