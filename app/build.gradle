@@ -7,6 +7,9 @@ apply plugin: 'kotlin-android-extensions'
 // Kotlin Annotation processor
 apply plugin: 'kotlin-kapt'
 
+// navigation plugin for sending values between fragments
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
