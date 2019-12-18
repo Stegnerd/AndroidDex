@@ -73,6 +73,7 @@
     <string name="logo_image_name">PokeBall</string>
     <string name="no_pokemon_image_name">No Pokemon Image</string>
     <string name="menu_image_pokedex">Pokedex</string>
+    <string name="detail_image_pokemon">Thumbnail</string>
 
 
     <!-- Menu Items -->
@@ -82,4 +83,16 @@
     <!-- ContextMenu Options-->
     <!-- List View -->
     <string name="menu_context_pokemonlist_filter">Filter</string>
+
+
+    <!-- stat labels-->
+    <string name="hp_label">HP: </string>
+    <string name="attack_label">Attack: </string>
+    <string name="defense_label">Defense: </string>
+    <string name="special_attack_label">Sp. Attack: </string>
+    <string name="special_defense_label">Sp. Defense: </string>
+    <string name="speed_label">Speed: </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
