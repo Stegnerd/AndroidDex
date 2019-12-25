@@ -48,6 +48,9 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
     private val _snackbarText = MutableLiveData<Event<Int>>()
     val snackbarMessage: LiveData<Event<Int>> = _snackbarText
 
+    private val _openPokemonEvent = MutableLiveData<Event<Int>>()
+    val openPokemonEvent: LiveData<Event<Int>> = _openPokemonEvent
+
     // Determines the filter based on generation on the list of _items
     private var _curentGenerationFiltering = GenerationFilterType.ALL
 
@@ -260,5 +263,12 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
      */
     fun isFilterApplied(type: TypeFilter): Boolean {
         return _currentTypeFiltering.contains(type)
+    }
+
+    /**
+     * Called by data binding for navigation
+     */
+    fun openPokemonDetail(pokedexId: Int) {
+        _openPokemonEvent.value = Event(pokedexId)
     }
 }

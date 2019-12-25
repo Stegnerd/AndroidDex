@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">AndroidDex</string>
 
+    <!-- Fragment Names -->
+    <string name="detail_fragment">Details</string>
+
     <!-- Error -->
     <string name="loading_pokemon_error">Error while loading pokemon</string>
 

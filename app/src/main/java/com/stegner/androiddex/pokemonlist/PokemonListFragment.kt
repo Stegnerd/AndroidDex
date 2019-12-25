@@ -7,10 +7,12 @@ import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.stegner.androiddex.R
 import com.stegner.androiddex.databinding.PokemonlistFragBinding
 import com.stegner.androiddex.util.Constants.Settings.GRID_COLUMN_COUNT
+import com.stegner.androiddex.util.EventObserver
 import com.stegner.androiddex.util.Helpers
 import com.stegner.androiddex.util.ItemOffsetDecoration
 import dagger.android.support.DaggerFragment
@@ -52,13 +54,13 @@ class PokemonListFragment : DaggerFragment() {
         // this is the PokemonListFragment.viewlifecycleowner
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
 
-        // set up navigation with fragment directions
-        setupNavigation()
+
         // bind the recycler view to the list adapter
         setUpListAdapter()
         // bind the recycler view to the grid adapter with custom padding
         setUpGridManager()
-
+        // set up navigation with fragment directions
+        setupNavigation()
         viewModel.loadPokemon()
     }
 
@@ -123,7 +125,9 @@ class PokemonListFragment : DaggerFragment() {
      * Sets up navigation to Pokemon Detail, then triggers navigation
      */
     private fun setupNavigation() {
-        // TODO need to implement this when have fragments
+        viewModel.openPokemonEvent.observe(this, EventObserver {
+            openPokemonDetails(it)
+        })
     }
 
     /**
@@ -171,5 +175,10 @@ class PokemonListFragment : DaggerFragment() {
         }else {
             Timber.w("viewmodel is not initialized when attempting to reset recycler position")
         }
+    }
+
+    private fun openPokemonDetails(pokedexId: Int) {
+        val action = PokemonListFragmentDirections.actionPokemonListFragmentToPokemonDetailFragment(pokedexId)
+        findNavController().navigate(action)
     }
 }

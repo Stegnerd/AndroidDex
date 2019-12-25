@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stegner.androiddex.data.Result
 import com.stegner.androiddex.data.Result.Success
 import com.stegner.androiddex.data.pokemon.Pokemon
 import com.stegner.androiddex.data.pokemon.repository.PokemonRepository
@@ -27,6 +26,17 @@ class PokemonDetailViewModel @Inject constructor(private val pokemonRepository: 
     // Flag to determine if still retrieving data
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean> = _dataLoading
+
+    // First type that the pokemon belongs to
+    private val _typeOne = MutableLiveData<String>()
+    val typeOne: LiveData<String> = _typeOne
+
+    // Second type that the pokemon belongs to, if mono type it is empty string
+    private val _typeTwo = MutableLiveData<String>()
+    val typeTwo: LiveData<String> = _typeTwo
+
+    private val _thumbnailIconRes = MutableLiveData<Int>()
+    val thumbnailIconRes: LiveData<Int> = _thumbnailIconRes
 
     // Id of the pokemon from the pokedex
     private val pokedexId: Int?
@@ -54,7 +64,7 @@ class PokemonDetailViewModel @Inject constructor(private val pokemonRepository: 
                     if(result is Success){
                         onPokemonLoaded(result.data)
                     } else {
-                        onPokemonNotLoaded(result)
+                        onPokemonNotLoaded()
                     }
                 }
             }
@@ -67,7 +77,7 @@ class PokemonDetailViewModel @Inject constructor(private val pokemonRepository: 
     /**
      * Update mutable live values to null and false when no pokemon is found
      */
-    private fun onPokemonNotLoaded(result: Result<Pokemon>){
+    private fun onPokemonNotLoaded(){
         _pokemon.value = null
         _isDataAvailable.value = false
     }
@@ -82,8 +92,22 @@ class PokemonDetailViewModel @Inject constructor(private val pokemonRepository: 
     /**
      * Update mutable live values to the loaded pokemon
      */
-    private fun setPokemon(pokemon: Pokemon?){
+    private fun setPokemon(pokemon: Pokemon){
+
         this._pokemon.value = pokemon
-        _isDataAvailable.value = pokemon != null
+
+        // set the types to display in the ui
+        // if not dual typing, set it to empty string for ease of displaying
+        _typeOne.value = pokemon.types[0]
+        _typeTwo.value = if (pokemon.types.count() > 1) pokemon.types[1] else ""
+
+        _isDataAvailable.value = true
+    }
+
+    /**
+     * Sets the resource id of the image to be displayed
+     */
+    fun setThumbnailIcon(resId: Int){
+        _thumbnailIconRes.value = resId
     }
 }

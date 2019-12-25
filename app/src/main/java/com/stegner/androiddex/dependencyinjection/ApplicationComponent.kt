@@ -36,6 +36,7 @@ import javax.inject.Singleton
         ApplicationModule::class,
         AndroidSupportInjectionModule::class,
         PokemonListModule::class,
+        PokemonDetailModule::class,
         WorkerModule::class
     ])
 interface ApplicationComponent : AndroidInjector<AndroidDexApplication> {

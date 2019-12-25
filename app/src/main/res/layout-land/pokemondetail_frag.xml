@@ -25,7 +25,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:contentDescription="@string/detail_image_pokemon"
-            android:src="@{ContextCompat.getDrawable(context, viewmodel.images.thumbnailId)}"
+            android:src="@{ContextCompat.getDrawable(context, viewmodel.thumbnailIconRes)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/thumbnail_135" />
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
-            android:text="@{viewmodel.names.english}"
+            android:text="@{viewmodel.pokemon.names.english}"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Jolteon" />
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
-            android:text="@{viewmodel.pokemon.id}"
+            android:text="@{String.valueOf(viewmodel.pokemon.id)}"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/pokemonDetailName"
             tools:text="135" />
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
-            android:text="@{viewmodel.pokemon.types.first()}"
+            android:text="@{viewmodel.typeOne}"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/pokemonDetailPokedexId"
             tools:text="Electric" />
@@ -69,9 +69,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
-            android:text="@{viewmodel.pokemon.types.last()}"
+            android:text="@{viewmodel.typeTwo}"
             app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/pokemonDetailTypeOne" />
+            app:layout_constraintTop_toBottomOf="@+id/pokemonDetailTypeOne"/>
 
         <ProgressBar
             android:id="@+id/hpStatBar"
