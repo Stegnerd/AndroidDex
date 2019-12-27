@@ -79,7 +79,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:progress="@{viewmodel.pokemon.stats.hp / 255}"
+            android:progress="@{viewmodel.hpValue}"
+            android:max="@integer/max_stat"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/attackStatBar"
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -91,7 +92,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:progress="@{viewmodel.pokemon.stats.attack / 255}"
+            android:progress="@{viewmodel.attackValue}"
+            android:max="@integer/max_stat"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/defenseStatBar"
             app:layout_constraintTop_toBottomOf="@+id/hpStatBar" />
@@ -103,7 +105,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:progress="@{viewmodel.pokemon.stats.defense / 255}"
+            android:progress="@{viewmodel.defenseValue}"
+            android:max="@integer/max_stat"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/specialAttackStatBar"
             app:layout_constraintTop_toBottomOf="@+id/attackStatBar" />
@@ -115,7 +118,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:progress="@{viewmodel.pokemon.stats.sp_attack / 255}"
+            android:progress="@{viewmodel.specialAttackValue}"
+            android:max="@integer/max_stat"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/specialDefenseStatBar"
             app:layout_constraintTop_toBottomOf="@+id/defenseStatBar" />
@@ -128,7 +132,8 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:progress="@{viewmodel.pokemon.stats.sp_defense / 255}"
+            android:progress="@{viewmodel.specialDefenseValue}"
+            android:max="@integer/max_stat"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/specialDefenseLabel"
             app:layout_constraintTop_toBottomOf="@+id/specialAttackStatBar" />
@@ -140,7 +145,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:progress="@{viewmodel.pokemon.stats.speed / 255}"
+            android:progress="@{viewmodel.speedValue}"
+            android:max="@integer/max_stat"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/specialDefenseStatBar"
             app:layout_constraintTop_toBottomOf="@+id/specialDefenseStatBar" />

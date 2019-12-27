@@ -35,6 +35,31 @@ class PokemonDetailViewModel @Inject constructor(private val pokemonRepository: 
     private val _typeTwo = MutableLiveData<String>()
     val typeTwo: LiveData<String> = _typeTwo
 
+    // Percentage of stat based on 255 max
+    private val _hpValue = MutableLiveData<Int>()
+    val hpValue : LiveData<Int> = _hpValue
+
+    // Percentage of stat based on 255 max
+    private val _attackValue = MutableLiveData<Int>()
+    val attackValue : LiveData<Int> = _attackValue
+
+    // Percentage of stat based on 255 max
+    private val _defenseValue = MutableLiveData<Int>()
+    val defenseValue: LiveData<Int> = _defenseValue
+
+    // Percentage of stat based on 255 max
+    private val _specialAttackValue = MutableLiveData<Int>()
+    val specialAttackValue : LiveData<Int> = _specialAttackValue
+
+    // Percentage of stat based on 255 max
+    private val _specialDefenseValue = MutableLiveData<Int>()
+    val specialDefenseValue : LiveData<Int> = _specialDefenseValue
+
+    // Percentage of stat based on 255 max
+    private val _speedValue = MutableLiveData<Int>()
+    val speedValue: LiveData<Int> = _speedValue
+
+    // Resource id of the image
     private val _thumbnailIconRes = MutableLiveData<Int>()
     val thumbnailIconRes: LiveData<Int> = _thumbnailIconRes
 
@@ -94,12 +119,20 @@ class PokemonDetailViewModel @Inject constructor(private val pokemonRepository: 
      */
     private fun setPokemon(pokemon: Pokemon){
 
-        this._pokemon.value = pokemon
+        _pokemon.value = pokemon
 
         // set the types to display in the ui
         // if not dual typing, set it to empty string for ease of displaying
         _typeOne.value = pokemon.types[0]
         _typeTwo.value = if (pokemon.types.count() > 1) pokemon.types[1] else ""
+
+        // Set the stats of the progress bar
+        _hpValue.value = pokemon.stats.hp
+        _attackValue.value = pokemon.stats.attack
+        _defenseValue.value = pokemon.stats.defense
+        _specialAttackValue.value = pokemon.stats.sp_attack
+        _specialDefenseValue.value = pokemon.stats.sp_defense
+        _speedValue.value = pokemon.stats.speed
 
         _isDataAvailable.value = true
     }
