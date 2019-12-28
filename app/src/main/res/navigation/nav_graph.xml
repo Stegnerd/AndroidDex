@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/pokemonListFragment">
     <fragment
         android:id="@+id/pokemonListFragment"
         android:name="com.stegner.androiddex.pokemonlist.PokemonListFragment"
-        android:label="@string/app_name" />
+        android:label="@string/app_name" >
+        <action
+            android:id="@+id/action_pokemonListFragment_to_pokemonDetailFragment"
+            app:destination="@id/pokemonDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pokemonDetailFragment"
+        android:name="com.stegner.androiddex.pokemondetail.PokemonDetailFragment"
+        android:label="@string/detail_fragment">
+        <action
+            android:id="@+id/action_pokemonDetailFragment_to_pokemonListFragment"
+            app:destination="@id/pokemonListFragment" />
+        <argument
+            android:name="pokedexId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

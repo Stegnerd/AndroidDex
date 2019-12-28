@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="androidx.core.content.ContextCompat"/>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewmodel"
+            type="com.stegner.androiddex.pokemondetail.PokemonDetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pokemonThumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="143dp"
+            android:layout_height="149dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:contentDescription="@string/detail_image_pokemon"
+            android:src="@{ContextCompat.getDrawable(context, viewmodel.thumbnailIconRes)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/thumbnail_135" />
+
+        <TextView
+            android:id="@+id/pokemonDetailName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="@{viewmodel.pokemon.names.english}"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Jolteon" />
+
+        <TextView
+            android:id="@+id/pokemonDetailPokedexId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:text="@{String.valueOf(viewmodel.pokemon.id)}"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/pokemonDetailName"
+            tools:text="135" />
+
+        <TextView
+            android:id="@+id/pokemonDetailTypeOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="@{viewmodel.typeOne}"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/pokemonDetailPokedexId"
+            tools:text="Electric" />
+
+        <TextView
+            android:id="@+id/pokemonDetailTypeTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@{viewmodel.typeTwo}"
+            app:layout_constraintBaseline_toBaselineOf="@+id/pokemonDetailTypeOne"
+            app:layout_constraintStart_toEndOf="@+id/pokemonDetailTypeOne"/>
+
+        <ProgressBar
+            android:id="@+id/hpStatBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:progress="@{viewmodel.hpValue}"
+            android:max="@integer/max_stat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/attackStatBar"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <ProgressBar
+            android:id="@+id/attackStatBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:progress="@{viewmodel.attackValue}"
+            android:max="@integer/max_stat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/defenseStatBar"
+            app:layout_constraintTop_toBottomOf="@+id/hpStatBar" />
+
+        <ProgressBar
+            android:id="@+id/defenseStatBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:progress="@{viewmodel.defenseValue}"
+            android:max="@integer/max_stat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/specialAttackStatBar"
+            app:layout_constraintTop_toBottomOf="@+id/attackStatBar" />
+
+        <ProgressBar
+            android:id="@+id/specialAttackStatBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:progress="@{viewmodel.specialAttackValue}"
+            android:max="@integer/max_stat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/specialDefenseStatBar"
+            app:layout_constraintTop_toBottomOf="@+id/defenseStatBar" />
+
+        <ProgressBar
+            android:id="@+id/specialDefenseStatBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:progress="@{viewmodel.specialDefenseValue}"
+            android:max="@integer/max_stat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/specialDefenseLabel"
+            app:layout_constraintTop_toBottomOf="@+id/specialAttackStatBar" />
+
+        <ProgressBar
+            android:id="@+id/speedStatBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:progress="@{viewmodel.speedValue}"
+            android:max="@integer/max_stat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/specialDefenseStatBar"
+            app:layout_constraintTop_toBottomOf="@+id/specialDefenseStatBar" />
+
+        <TextView
+            android:id="@+id/hpLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
+            android:text="@string/hp_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            tools:text="@string/hp_label" />
+
+        <TextView
+            android:id="@+id/attackLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/attack_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hpLabel"
+            tools:text="@string/attack_label" />
+
+        <TextView
+            android:id="@+id/defenseLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/defense_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/attackLabel"
+            tools:text="@string/defense_label" />
+
+        <TextView
+            android:id="@+id/specialAttackLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="26dp"
+            android:text="@string/special_attack_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/defenseLabel"
+            tools:text="@string/special_attack_label" />
+
+        <TextView
+            android:id="@+id/specialDefenseLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
+            android:text="@string/special_defense_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/specialAttackLabel" />
+
+        <TextView
+            android:id="@+id/speedLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
+            android:text="@string/speed_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/specialDefenseLabel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

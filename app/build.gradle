@@ -7,6 +7,9 @@ apply plugin: 'kotlin-android-extensions'
 // Kotlin Annotation processor
 apply plugin: 'kotlin-kapt'
 
+// navigation plugin for sending values between fragments
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
@@ -89,15 +92,15 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
 
-
     //////////////////////
     // App dependencies //
     /////////////////////
-    implementation "androidx.appcompat:appcompat:$appCompatVersion" // Support for the Action Bar user interface design pattern. This library includes support for material design user interface implementations.
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    // Support for the Action Bar user interface design pattern. This library includes support for material design user interface implementations.
     implementation "androidx.cardview:cardview:$cardViewVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion" // Provides Dispatchers.Main context for Android applications
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"    // Provides Dispatchers.Main context for Android applications
     implementation "com.google.code.gson:gson:$gsonVersion" // JSON library from google
-    implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"// Allows use of recyclerView in layouts
+    implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion" // Allows use of recyclerView in layouts
     implementation "androidx.room:room-runtime:$roomVersion" // sqllite wrapper
     kapt "androidx.room:room-compiler:$roomVersion" // annotation processor for room
     implementation "com.jakewharton.timber:timber:$timberVersion" // Logging/ Debugging library
@@ -116,10 +119,10 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion" // ConstraintLayout for Android
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion" // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion" // annotation processor if using Java8, use the following instead of lifecycle-compiler
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion" // Builds upon navigation-runtime and provides out-of-the-box support for fragments as destination
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"// Builds upon navigation-runtime and provides out-of-the-box support for fragments as destination
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion" // allows you to easily add navigation drawers, menus and bottom navigation to your app consistent with the Material Design guidelines
     kapt "androidx.room:room-compiler:$roomVersion" // annotation processor for room
-    implementation "androidx.room:room-ktx:$roomVersion"// Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$roomVersion" // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-runtime:$roomVersion" // sqllite wrapper
 
     ///////////////////////////////////////
@@ -132,9 +135,9 @@ dependencies {
     testImplementation "androidx.test.espresso:espresso-core:$espressoVersion" // Contains core and basic View matchers, actions, and assertions. See Basics and Recipes
     testImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion" // External contributions that contain DatePicker, RecyclerView and Drawer actions, accessibility checks, and CountingIdlingResource
     testImplementation "androidx.test.espresso:espresso-intents:$espressoVersion" // Extension to validate and stub intents for hermetic testing
-    testImplementation "com.google.truth:truth:$truthVersion"
+    testImplementation "com.google.truth:truth:$truthVersion" // Assertion library for unit tests
     testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion" // Matchers that can be combined to create flexible expressions of intent
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion" // Provides Dispatchers.Main context for Android applications.
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion" // This package provides testing utilities for effectively testing coroutines
     testImplementation "junit:junit:$junitVersion" // Testing library
 
@@ -142,14 +145,14 @@ dependencies {
     // Dependencies for Android unit tests - Instrumented testing //
     ////////////////////////////////////////////////////////////////
     androidTestImplementation "androidx.work:work-testing:$workVersion" // Testing library provides a way to manually initialize WorkManager for tests
-    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion" // Test utilities for kotlinx.coroutines
     androidTestImplementation "junit:junit:$junitVersion" // Testing library
 
     /////////////////////////////////
     // Androidx Test - JVM Testing //
     ////////////////////////////////
     testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion" // Android jetback for kotlin
-    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
+    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion" // junit extension for Kotlin
     testImplementation "androidx.test:rules:$androidXTestRulesVersion" // JUnit Rules
 
     ///////////////////////////////////////////
@@ -178,18 +181,16 @@ dependencies {
     // Kotlin //
     ///////////
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version" // The language itself
-    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion" // Access to the android fragment api
+    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
+    // Access to the android fragment api
 
     ////////////
     // Dagger //
     ///////////
     implementation "com.google.dagger:dagger:$daggerVersion" // A fast dependency injector for Android and Java
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    // Tools to generate Dagger injection and module adapters from annotated code and validate them
-    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
-    // Support libraries for android/dagger
-    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
-    // Annotation processor for dagger
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion" // Tools to generate Dagger injection and module adapters from annotated code and validate them
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion" // Support libraries for android/dagger
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"// Annotation processor for dagger
     // Using dagger for tests as well
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
     kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
