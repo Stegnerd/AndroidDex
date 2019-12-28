@@ -14,12 +14,9 @@ import com.stegner.androiddex.R
  */
 class PokemonGenerationFragment : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.pokemongeneration_fragment, container, false)
+        return inflater.inflate(R.layout.pokemongeneration_frag, container, false)
     }
 
 
