@@ -11,6 +11,7 @@
     <!-- Generation -->
     <string name="label_all">All</string>
     <string name="label_all_no_pokemon">No pokemon of those type(s) exist in the national dex</string>
+    <string name="label_national">National</string>
     <string name="label_kanto">Kanto</string>
     <string name="label_kanto_no_pokemon">No pokemon of those type(s) exist in the Kanto dex</string>
     <string name="label_jhoto">Jhoto</string>
@@ -81,6 +82,7 @@
 
     <!-- Menu Items -->
     <!-- Drawer Menu-->
+    <string name="menu_drawer_generation">Main Menu</string>
     <string name="menu_drawer_pokedex">Pokedex</string>
 
     <!-- ContextMenu Options-->

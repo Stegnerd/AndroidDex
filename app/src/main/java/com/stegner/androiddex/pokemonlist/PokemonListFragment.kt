@@ -8,17 +8,23 @@ import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.stegner.androiddex.R
+import com.stegner.androiddex.data.pokemon.Pokemon
 import com.stegner.androiddex.databinding.PokemonlistFragBinding
 import com.stegner.androiddex.util.Constants.Settings.GRID_COLUMN_COUNT
 import com.stegner.androiddex.util.EventObserver
+import com.stegner.androiddex.util.GenerationFilterType
 import com.stegner.androiddex.util.Helpers
 import com.stegner.androiddex.util.ItemOffsetDecoration
 import dagger.android.support.DaggerFragment
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Display a grid of cards of [Pokemon]. Use can filter based on type
+ */
 class PokemonListFragment : DaggerFragment() {
 
     @Inject
@@ -26,7 +32,7 @@ class PokemonListFragment : DaggerFragment() {
 
     private val viewModel by viewModels<PokemonListViewModel> {viewModelFactory}
 
-    //private val args: PokemonListFragmentArgs
+    private val args: PokemonListFragmentArgs by navArgs()
 
     private lateinit var viewDataBinding: PokemonlistFragBinding
 
@@ -61,6 +67,11 @@ class PokemonListFragment : DaggerFragment() {
         setUpGridManager()
         // set up navigation with fragment directions
         setupNavigation()
+
+        // Set the generation to the filter from nav args
+        viewModel.setGenerationFiltering(GenerationFilterType.values()[args.genId])
+
+        // Load pokemon from database with filters applied
         viewModel.loadPokemon()
     }
 
@@ -125,7 +136,7 @@ class PokemonListFragment : DaggerFragment() {
      * Sets up navigation to Pokemon Detail, then triggers navigation
      */
     private fun setupNavigation() {
-        viewModel.openPokemonEvent.observe(this, EventObserver {
+        viewModel.openPokemonEvent.observe(this.viewLifecycleOwner, EventObserver {
             openPokemonDetails(it)
         })
     }
@@ -177,6 +188,9 @@ class PokemonListFragment : DaggerFragment() {
         }
     }
 
+    /**
+     * Triggers navigation to the Detail view, using fragment directions
+     */
     private fun openPokemonDetails(pokedexId: Int) {
         val action = PokemonListFragmentDirections.actionPokemonListFragmentToPokemonDetailFragment(pokedexId)
         findNavController().navigate(action)

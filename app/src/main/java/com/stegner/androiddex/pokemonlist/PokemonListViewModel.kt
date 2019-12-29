@@ -15,13 +15,16 @@ import com.stegner.androiddex.util.TypeFilter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class PokemonListViewModel @Inject constructor (private val pokemonRepository: PokemonRepository): ViewModel() {
+/**
+ * ViewModel for the List View of pokemon [PokemonListFragment]
+ */
+class PokemonListViewModel @Inject constructor(private val pokemonRepository: PokemonRepository) : ViewModel() {
 
     // just an instance of this classes name for logging purposes
-    private val TAG by lazy { PokemonListViewModel::class.java.simpleName}
+    private val TAG by lazy { PokemonListViewModel::class.java.simpleName }
 
     // This is the list of items to display in the list view
-    private val _items= MutableLiveData<List<Pokemon>>().apply { value = emptyList() }
+    private val _items = MutableLiveData<List<Pokemon>>().apply { value = emptyList() }
     val items: LiveData<List<Pokemon>> = _items
 
     // Flag to determine if still retrieving data
@@ -30,10 +33,10 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
 
     // Determines the id of the string representing the filter in the ui, ex: Kanto
     private val _currentGenerationFilteringLabel = MutableLiveData<Int>()
-    val currentGenerationFilteringLabel : LiveData<Int> = _currentGenerationFilteringLabel
+    val currentGenerationFilteringLabel: LiveData<Int> = _currentGenerationFilteringLabel
 
     // Determines the id of the string to show when no pokemon are available
-    private val _noPokemonLabel= MutableLiveData<String>()
+    private val _noPokemonLabel = MutableLiveData<String>()
     val noPokemonLabel: LiveData<String> = _noPokemonLabel
 
     // Determines the id of the image to show when no pokemon are available
@@ -42,12 +45,13 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
 
     // Determines the id of the icon representing the filter in the ui, ex: [1]
     private val _filterIconRes = MutableLiveData<Int>()
-    val filterIconRes : LiveData<Int> = _filterIconRes
+    val filterIconRes: LiveData<Int> = _filterIconRes
 
     //pop up message test, like toast
     private val _snackbarText = MutableLiveData<Event<Int>>()
     val snackbarMessage: LiveData<Event<Int>> = _snackbarText
 
+    // Listener for when a pokemon is selected
     private val _openPokemonEvent = MutableLiveData<Event<Int>>()
     val openPokemonEvent: LiveData<Event<Int>> = _openPokemonEvent
 
@@ -59,7 +63,7 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
     private var _currentTypeFiltering = mutableListOf<TypeFilter>()
 
     // used by the layout to determine when the list of items is empty
-    val empty: LiveData<Boolean> = Transformations.map(_items){
+    val empty: LiveData<Boolean> = Transformations.map(_items) {
         it.isEmpty()
     }
 
@@ -69,7 +73,7 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
         loadPokemon()
     }
 
-    private fun showSnackbarMessage(message: Int){
+    private fun showSnackbarMessage(message: Int) {
         _snackbarText.value = Event(message)
     }
 
@@ -82,10 +86,10 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
      * [GenerationFilterType.SINNOH], [GenerationFilterType.UNOVA], [GenerationFilterType.KALOS]
      * [GenerationFilterType.ALOLA], [GenerationFilterType.GALAR]
      */
-    fun setGenerationFiltering(filter: GenerationFilterType){
+    fun setGenerationFiltering(filter: GenerationFilterType) {
         _curentGenerationFiltering = filter
 
-        when(filter){
+        when (filter) {
             GenerationFilterType.ALL -> {
                 setGenerationFilter(R.string.label_all, R.drawable.ic_clear_filter_black_24dp)
             }
@@ -119,7 +123,7 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
     /**
      * Used to set mutable live data values for filters based on click events from the ui
      */
-    private fun setGenerationFilter(@StringRes filteringLabelString: Int, @DrawableRes filteringIconDrawable: Int){
+    private fun setGenerationFilter(@StringRes filteringLabelString: Int, @DrawableRes filteringIconDrawable: Int) {
         _currentGenerationFilteringLabel.value = filteringLabelString
         _filterIconRes.value = filteringIconDrawable
     }
@@ -130,26 +134,26 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
      * @param filter The [TypeFilter] to be added/removed
      * @param add Flag to determine if [TypeFilter] should be added
      */
-    fun setTypeFiltering(filter: TypeFilter, add: Boolean){
-        if(add){
+    fun setTypeFiltering(filter: TypeFilter, add: Boolean) {
+        if (add) {
             _currentTypeFiltering.add(filter)
-        }else {
+        } else {
             _currentTypeFiltering.remove(filter)
         }
 
         // if clicked all to reset ui clear list and add All
-        if(filter == TypeFilter.All){
+        if (filter == TypeFilter.All) {
             _currentTypeFiltering.clear()
             _currentTypeFiltering.add(filter)
         }
         // If All is in the list and new type added remove All to apply filter
         // ex: All is checked and user clicks Electric
-        else if(_currentTypeFiltering.contains(TypeFilter.All) && _currentTypeFiltering.count() > 1){
+        else if (_currentTypeFiltering.contains(TypeFilter.All) && _currentTypeFiltering.count() > 1) {
             _currentTypeFiltering.remove(TypeFilter.All)
         }
         // If user unchecks all filters reset back to All
         // ex: Electric is checked and user unchecks it. Reset to All
-        else if(_currentTypeFiltering.count() == 0){
+        else if (_currentTypeFiltering.count() == 0) {
             _currentTypeFiltering.add(TypeFilter.All)
         }
 
@@ -160,7 +164,7 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
     /**
      * Sets the string and icon for when a filter has no results.
      */
-    private fun setTypeFilter(){
+    private fun setTypeFilter() {
         val currentFilterCommaString = _currentTypeFiltering.joinToString { it.toString() }
 
         _noPokemonLabel.value = "No pokemon of those type combinations exist: $currentFilterCommaString"
@@ -180,7 +184,7 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
 
             Log.w(TAG, "pokemonResult: ${pokemonResult.succeeded}")
 
-            if(pokemonResult is Success){
+            if (pokemonResult is Success) {
                 val pokemon = pokemonResult.data
 
                 Log.w(TAG, "pokemon count: ${pokemon.count()}")
@@ -216,10 +220,10 @@ class PokemonListViewModel @Inject constructor (private val pokemonRepository: P
     private fun generationFilter(prefilteredList: List<Pokemon>): List<Pokemon> {
         val filteredList = mutableListOf<Pokemon>()
 
-        for (poke in prefilteredList){
-            if(_curentGenerationFiltering.generation == 0){
+        for (poke in prefilteredList) {
+            if (_curentGenerationFiltering.generation == 0) {
                 filteredList.add(poke)
-            }else if(poke.generation == _curentGenerationFiltering.generation) {
+            } else if (poke.generation == _curentGenerationFiltering.generation) {
                 filteredList.add(poke)
             }
         }

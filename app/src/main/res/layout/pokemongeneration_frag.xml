@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+            <variable
+                name="viewmodel"
+                type="com.stegner.androiddex.pokemongeneration.PokemonGenerationViewModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/pokedex">
+
+        <Button
+            android:id="@+id/genFiveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_unova"
+            android:onClick="@{() -> viewmodel.openPokemonList(5)}"
+            app:layout_constraintBottom_toTopOf="@+id/genSevenButton"
+            app:layout_constraintEnd_toStartOf="@+id/genSixButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/genThreeButton" />
+
+        <Button
+            android:id="@+id/genTwoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_jhoto"
+            android:onClick="@{() -> viewmodel.openPokemonList(2)}"
+            app:layout_constraintBottom_toTopOf="@+id/genFourButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/genOneButton"
+            app:layout_constraintTop_toBottomOf="@+id/appTitle" />
+
+        <Button
+            android:id="@+id/genFourButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_sinnoh"
+            android:onClick="@{() -> viewmodel.openPokemonList(4)}"
+            app:layout_constraintBottom_toTopOf="@+id/genSixButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/genThreeButton"
+            app:layout_constraintTop_toBottomOf="@+id/genTwoButton" />
+
+        <Button
+            android:id="@+id/genSixButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_kalos"
+            android:onClick="@{() -> viewmodel.openPokemonList(6)}"
+            app:layout_constraintBottom_toTopOf="@+id/genAllButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/genFiveButton"
+            app:layout_constraintTop_toBottomOf="@+id/genFourButton" />
+
+        <Button
+            android:id="@+id/genSevenButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="64dp"
+            android:text="@string/label_alola"
+            android:onClick="@{() -> viewmodel.openPokemonList(7)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/genAllButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/genFiveButton" />
+
+        <Button
+            android:id="@+id/genOneButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_kanto"
+            android:onClick="@{() -> viewmodel.openPokemonList(1)}"
+            app:layout_constraintBottom_toTopOf="@+id/genThreeButton"
+            app:layout_constraintEnd_toStartOf="@+id/genTwoButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appTitle" />
+
+        <Button
+            android:id="@+id/genThreeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_hoenn"
+            android:onClick="@{() -> viewmodel.openPokemonList(3)}"
+            app:layout_constraintBottom_toTopOf="@+id/genFiveButton"
+            app:layout_constraintEnd_toStartOf="@+id/genFourButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/genOneButton" />
+
+        <ImageView
+            android:id="@+id/appTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="180dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/app_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/genAllButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="64dp"
+            android:text="@string/label_national"
+            android:onClick="@{() -> viewmodel.openPokemonList(0)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/genSevenButton"
+            app:layout_constraintTop_toBottomOf="@+id/genSixButton" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
