@@ -82,6 +82,7 @@
 
     <!-- Menu Items -->
     <!-- Drawer Menu-->
+    <string name="menu_drawer_generation">Main Menu</string>
     <string name="menu_drawer_pokedex">Pokedex</string>
 
     <!-- ContextMenu Options-->

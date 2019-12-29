@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/pokemonGenerationFragment"
+        android:icon="@drawable/ic_pokedex"
+        android:title="@string/menu_drawer_generation"/>
+    <item
         android:id="@+id/pokemonListFragment"
         android:icon="@drawable/ic_pokedex"
         android:title="@string/menu_drawer_pokedex"/>

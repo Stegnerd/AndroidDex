@@ -2,5 +2,5 @@
 <resources>
 
     <integer name="max_stat">255</integer>
-
+    <integer name="default_gen">0</integer>
 </resources>
