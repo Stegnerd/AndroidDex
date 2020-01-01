@@ -1,6 +1,7 @@
 package com.stegner.androiddex.pokemongeneration
 
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -64,20 +65,24 @@ class PokemonGenerationFragment : DaggerFragment() {
      * Called when the activity is starting
      *
      * This is used to hide the support bar on this fragment only
+     * Also locks to Portrait mode
      */
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+        (activity as AppCompatActivity?)!!.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     /**
      * Called when the activity is stopping
      *
      * This un-hides the support bar for the rest of the fragments
+     * Also allows rotation when navigating away
      */
     override fun onStop() {
         super.onStop()
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+        (activity as AppCompatActivity?)!!.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
     }
 
     /**
