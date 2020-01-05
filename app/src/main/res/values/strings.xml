@@ -88,7 +88,7 @@
     <!-- ContextMenu Options-->
     <!-- List View -->
     <string name="menu_context_pokemonlist_filter">Filter</string>
-
+    <string name="menu_context_pokemonlist_search">Search</string>
 
     <!-- stat labels-->
     <string name="hp_label">HP: </string>
