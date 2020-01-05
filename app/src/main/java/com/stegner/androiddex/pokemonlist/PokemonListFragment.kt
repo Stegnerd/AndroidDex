@@ -3,6 +3,8 @@ package com.stegner.androiddex.pokemonlist
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.viewModels
@@ -25,7 +27,7 @@ import javax.inject.Inject
 /**
  * Display a grid of cards of [Pokemon]. Use can filter based on type
  */
-class PokemonListFragment : DaggerFragment() {
+class PokemonListFragment : DaggerFragment(){
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -77,6 +79,34 @@ class PokemonListFragment : DaggerFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.pokemonlist_fragment_menu, menu)
+
+        // Attach listeners to the search view
+        setUpSearch(menu)
+    }
+
+    /**
+     * Sets up listener for typing events with the search bar
+     */
+    private fun setUpSearch(menu: Menu){
+        // get the item from the view
+        val menuItem: MenuItem = menu.findItem(R.id.menu_search)
+        // cast it to the proper type
+        val searchView: SearchView = (menuItem.actionView as SearchView)
+
+        // set the listeners on it
+        searchView.setOnQueryTextListener(object: OnQueryTextListener {
+            override fun onQueryTextChange(query: String?): Boolean {
+                viewModel.setNameFiltering(query)
+                viewModel.loadPokemon()
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                viewModel.loadPokemon()
+                return true
+            }
+        })
+
     }
 
     /**
