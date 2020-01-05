@@ -62,6 +62,9 @@ class PokemonListViewModel @Inject constructor(private val pokemonRepository: Po
     // set to MutableList to handle updates from ui
     private var _currentTypeFiltering = mutableListOf<TypeFilter>()
 
+    // Determines the filter based on the name of the list of _items
+    private var _currentNameFiltering = ""
+
     // used by the layout to determine when the list of items is empty
     val empty: LiveData<Boolean> = Transformations.map(_items) {
         it.isEmpty()
@@ -129,6 +132,13 @@ class PokemonListViewModel @Inject constructor(private val pokemonRepository: Po
     }
 
     /**
+     * Used to set the value of the name filter based on click events from the ui
+     */
+    fun setNameFiltering(nameFilter: String?){
+        _currentNameFiltering = nameFilter ?: ""
+    }
+
+    /**
      * Updates the current type filter list.
      *
      * @param filter The [TypeFilter] to be added/removed
@@ -182,24 +192,16 @@ class PokemonListViewModel @Inject constructor(private val pokemonRepository: Po
             // all pokemon from  the repository
             val pokemonResult = pokemonRepository.getPokemon()
 
-            Log.w(TAG, "pokemonResult: ${pokemonResult.succeeded}")
-
             if (pokemonResult is Success) {
                 val pokemon = pokemonResult.data
 
-                Log.w(TAG, "pokemon count: ${pokemon.count()}")
-                Log.w(TAG, "Generation filter: ${_curentGenerationFiltering.generation}")
-                Log.w(TAG, "type filter: ${_currentTypeFiltering}")
+                val nameFilteredList = nameFilter(pokemon)
 
                 // filter all pokemon according to the generation
-                val generationFilteredList = generationFilter(pokemon)
-
-                Log.w(TAG, "Generation filtered list count: ${generationFilteredList.count()}")
+                val generationFilteredList = generationFilter(nameFilteredList)
 
                 // filter the generation list based on the type filter
                 val typeFilteredList = typeFilter(generationFilteredList)
-
-                Log.w(TAG, "Type filtered list count: ${typeFilteredList.count()}")
 
                 _items.value = ArrayList(typeFilteredList)
             } else {
@@ -232,7 +234,7 @@ class PokemonListViewModel @Inject constructor(private val pokemonRepository: Po
     }
 
     /**
-     * Iterates overs list of loaded pokemon and applies type filter to it.
+     * Iterates over list of loaded pokemon and applies type filter to it.
      *
      * @return List<Pokemon> that is within filter
      */
@@ -260,6 +262,28 @@ class PokemonListViewModel @Inject constructor(private val pokemonRepository: Po
         }
 
         return filteredList
+    }
+
+    /**
+     * Iterates over list of loaded pokemon and applies name filter to it.
+     *
+     * @return List<Pokemon> that is within filter
+     */
+    private fun nameFilter(listOfPokemon: List<Pokemon>): List<Pokemon>{
+
+        if(_currentNameFiltering.isEmpty()){
+            return listOfPokemon
+        }
+
+        val nameFilteredList = mutableListOf<Pokemon>()
+
+        for (poke in listOfPokemon){
+            if(poke.names.english.toLowerCase().contains(_currentNameFiltering.toLowerCase())){
+                nameFilteredList.add(poke)
+            }
+        }
+
+        return nameFilteredList
     }
 
     /**

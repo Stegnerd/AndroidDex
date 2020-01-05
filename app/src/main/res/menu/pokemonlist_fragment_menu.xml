@@ -6,8 +6,8 @@
         android:id="@+id/menu_search"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="@string/menu_context_pokemonlist_search"
-        app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always" />
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_filter"
         android:title="@string/menu_context_pokemonlist_filter"
