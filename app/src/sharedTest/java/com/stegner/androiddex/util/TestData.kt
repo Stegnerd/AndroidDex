@@ -4,8 +4,14 @@ import com.stegner.androiddex.data.pokemon.Pokemon
 import com.stegner.androiddex.data.pokemon.PokemonNames
 import com.stegner.androiddex.data.pokemon.PokemonStats
 
+/**
+ * Testing data, mock data for quick access to data
+ */
 object MockData {
 
+    /**
+     * Creates a list of mock data, two of each type
+     */
     fun seedData(): List<Pokemon> {
 
         val list = mutableListOf<Pokemon>()
@@ -79,7 +85,7 @@ object MockData {
         val names1 = PokemonNames("Dratini", "ミニリュウ", "迷你龙", "Minidraco")
         val stats1 = PokemonStats(41,64,45,50,50,50)
         val types1 = listOf("Dragon")
-        val dragon1 = Pokemon(1,147, names1, types1, stats1)
+        val dragon1 = Pokemon(147,1, names1, types1, stats1)
         list.add(dragon1)
 
         // Dual type

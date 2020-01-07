@@ -5,7 +5,6 @@ import com.google.common.truth.Truth.assertThat
 import com.stegner.androiddex.LiveDataTestUtil
 import com.stegner.androiddex.MainCoroutineRule
 import com.stegner.androiddex.data.pokemon.repository.FakeRepository
-import com.stegner.androiddex.data.pokemon.repository.PokemonRepository
 import com.stegner.androiddex.util.TypeFilter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
@@ -17,7 +16,7 @@ class PokemonListViewModelTest {
 
     private lateinit var pokemonListViewModel: PokemonListViewModel
 
-    private lateinit var pokemonRepository: PokemonRepository
+    private lateinit var pokemonRepository: FakeRepository
 
     @ExperimentalCoroutinesApi
     @get:Rule
@@ -48,6 +47,6 @@ class PokemonListViewModelTest {
 
         assertThat(LiveDataTestUtil.getValue(pokemonListViewModel.dataLoading)).isFalse()
 
-        assertThat(LiveDataTestUtil.getValue(pokemonListViewModel.items)).hasSize(809)
+        assertThat(LiveDataTestUtil.getValue(pokemonListViewModel.items)).hasSize(36)
     }
 }

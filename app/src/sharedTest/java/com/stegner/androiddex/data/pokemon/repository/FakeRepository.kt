@@ -8,6 +8,7 @@ import com.stegner.androiddex.util.Constants.Errors.GET_POKEMON_BY_GENERATION_ER
 import com.stegner.androiddex.util.Constants.Errors.GET_POKEMON_BY_TYPE_ERROR
 import com.stegner.androiddex.util.Constants.Errors.GET_POKEMON_ERROR
 import com.stegner.androiddex.util.Constants.Errors.GET_POKEMON_LIST_ERROR
+import com.stegner.androiddex.util.MockData
 
 /**
  * Implementation of a remote data source with static access to the data for easy testing
@@ -15,9 +16,15 @@ import com.stegner.androiddex.util.Constants.Errors.GET_POKEMON_LIST_ERROR
 class FakeRepository : PokemonRepository {
 
     // Temporary holder of data during tests
-    var pokemonData: LinkedHashMap<Int, Pokemon> = LinkedHashMap()
+    private var pokemonData: LinkedHashMap<Int, Pokemon> = LinkedHashMap()
 
     private var shouldReturnError = false
+
+    init {
+        // Seed  the database for mock data
+        seedPokemon()
+    }
+
 
     fun setReturnError(value: Boolean) {
         shouldReturnError = value
@@ -83,4 +90,11 @@ class FakeRepository : PokemonRepository {
         }
     }
 
+    fun seedPokemon(){
+        val seedData = MockData.seedData()
+
+        for (poke in seedData){
+            pokemonData[poke.id] = poke
+        }
+    }
 }
