@@ -31,10 +31,6 @@ class PokemonListViewModel @Inject constructor(private val pokemonRepository: Po
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean> = _dataLoading
 
-    // Determines the id of the string representing the filter in the ui, ex: Kanto
-    private val _currentGenerationFilteringLabel = MutableLiveData<Int>()
-    val currentGenerationFilteringLabel: LiveData<Int> = _currentGenerationFilteringLabel
-
     // Determines the id of the string to show when no pokemon are available
     private val _noPokemonLabel = MutableLiveData<String>()
     val noPokemonLabel: LiveData<String> = _noPokemonLabel
@@ -127,7 +123,6 @@ class PokemonListViewModel @Inject constructor(private val pokemonRepository: Po
      * Used to set mutable live data values for filters based on click events from the ui
      */
     private fun setGenerationFilter(@StringRes filteringLabelString: Int, @DrawableRes filteringIconDrawable: Int) {
-        _currentGenerationFilteringLabel.value = filteringLabelString
         _filterIconRes.value = filteringIconDrawable
     }
 
