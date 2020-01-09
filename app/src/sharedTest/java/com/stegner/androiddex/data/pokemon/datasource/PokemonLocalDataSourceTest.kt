@@ -36,7 +36,6 @@ class PokemonLocalDataSourceTest{
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @ExperimentalCoroutinesApi
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 

@@ -30,7 +30,6 @@ class PokemonDetailViewModelTest {
     @get: Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @ExperimentalCoroutinesApi
     @get: Rule
     var instanceExecutorRule = InstantTaskExecutorRule()
 

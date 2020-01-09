@@ -52,7 +52,6 @@ class PokemonDaoTest {
     var mainCoroutineRule = MainCoroutineRule()
 
     // makes asynchronous code run synchronously
-    @ExperimentalCoroutinesApi
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 

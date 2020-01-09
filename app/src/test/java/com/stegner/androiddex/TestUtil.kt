@@ -7,9 +7,9 @@ import org.junit.Assert.assertEquals
 /**
  * Assertion for testing live event equal to what triggered the event
  */
-fun assertLiveDataEventTriggered(liveData: LiveData<Event<Int>>, pokedexId: Int){
+fun assertLiveDataEventTriggered(liveData: LiveData<Event<Int>>, id: Int){
     val value = LiveDataTestUtil.getValue(liveData)
-    assertEquals(value.getContentIfNotHandled(), pokedexId)
+    assertEquals(value.getContentIfNotHandled(), id)
 }
 
 /**
