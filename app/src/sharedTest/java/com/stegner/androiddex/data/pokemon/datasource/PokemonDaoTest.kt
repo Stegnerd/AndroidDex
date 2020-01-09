@@ -2,16 +2,12 @@ package com.stegner.androiddex.data.pokemon.datasource
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.test.filters.SmallTest
 import com.stegner.androiddex.MainCoroutineRule
 import com.stegner.androiddex.data.pokemon.Pokemon
 import com.stegner.androiddex.data.pokemon.PokemonDatabase
-import com.stegner.androiddex.dependencyinjection.workers.DataBaseSeedWorker
 import com.stegner.androiddex.util.GenerationFilterType.*
 import com.stegner.androiddex.util.TestSeedWorker
 import com.stegner.androiddex.util.TypeFilter.*
@@ -44,6 +40,7 @@ import org.junit.runner.RunWith
  */
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
+@SmallTest
 class PokemonDaoTest {
 
     private lateinit var database: PokemonDatabase
@@ -55,6 +52,7 @@ class PokemonDaoTest {
     var mainCoroutineRule = MainCoroutineRule()
 
     // makes asynchronous code run synchronously
+    @ExperimentalCoroutinesApi
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 

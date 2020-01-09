@@ -4,15 +4,19 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.MediumTest
 import com.stegner.androiddex.MainCoroutineRule
 import com.stegner.androiddex.data.pokemon.PokemonDatabase
 import com.stegner.androiddex.util.TestSeedWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.core.IsEqual
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
@@ -22,6 +26,7 @@ import org.junit.runner.RunWith
  */
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
+@MediumTest
 class PokemonLocalDataSourceTest{
 
     private lateinit var localDataSource: PokemonLocalDataSource
@@ -31,6 +36,7 @@ class PokemonLocalDataSourceTest{
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
+    @ExperimentalCoroutinesApi
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
@@ -53,5 +59,10 @@ class PokemonLocalDataSourceTest{
     @After
     fun cleanUp(){
         database.close()
+    }
+
+    @Test
+    fun placeholderTest() {
+        assertThat(1, IsEqual(1))
     }
 }
