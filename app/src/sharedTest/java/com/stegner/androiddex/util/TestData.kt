@@ -12,7 +12,7 @@ object MockData {
     /**
      * Creates a list of mock data, two of each type
      */
-    fun seedData(): List<Pokemon> {
+    fun generateData(): List<Pokemon> {
 
         val list = mutableListOf<Pokemon>()
 

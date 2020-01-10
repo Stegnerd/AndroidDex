@@ -91,7 +91,7 @@ class FakeRepository : PokemonRepository {
     }
 
     fun seedPokemon(){
-        val seedData = MockData.seedData()
+        val seedData = MockData.generateData()
 
         for (poke in seedData){
             pokemonData[poke.id] = poke
