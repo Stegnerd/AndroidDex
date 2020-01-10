@@ -50,6 +50,7 @@ ext {
     junitVersion = '4.12'
     mannodermausJunitVersion = '1.1.0'
     recyclerViewVersion = '1.1.0'
+    robolectricVersion = '4.3-beta-1'
     roomVersion = '2.2.2'
     timberVersion = '4.7.1'
     truthVersion = '0.44'

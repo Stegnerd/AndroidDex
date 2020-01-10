@@ -139,6 +139,7 @@ dependencies {
     testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion" // Matchers that can be combined to create flexible expressions of intent
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion" // Provides Dispatchers.Main context for Android applications.
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion" // This package provides testing utilities for effectively testing coroutines
+    testImplementation "org.robolectric:robolectric:$robolectricVersion" // Framework for automating ui testing
     testImplementation "junit:junit:$junitVersion" // Testing library
 
     ////////////////////////////////////////////////////////////////
@@ -169,6 +170,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion" //Contains core and basic View matchers, actions, and assertions. See Basics and Recipes
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion" // External contributions that contain DatePicker, RecyclerView and Drawer actions, accessibility checks, and CountingIdlingResource
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion" // Extension to validate and stub intents for hermetic testing
+    androidTestImplementation "org.robolectric:annotations:$robolectricVersion" // Framework for automating ui testing
 
     ////////////////////////////////////////////////////////////////////////
     // Resolve conflicts between main and test apk - MIGHT NOT NEED THIS //
