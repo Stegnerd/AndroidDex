@@ -26,3 +26,6 @@ This is an attempt to learn Kotlin/Android development. It was based majorly on 
 
 # Screenshots
 
+![Landing Page](https://github.com/Stegnerd/AndroidDex/blob/master/Screenshots/LandingPage.png) ![List View](https://github.com/Stegnerd/AndroidDex/blob/master/Screenshots/List.png)
+![Detail Vertical](https://github.com/Stegnerd/AndroidDex/blob/master/Screenshots/Portrait%20Detail.png) ![Detail Horizontal](https://github.com/Stegnerd/AndroidDex/blob/master/Screenshots/Landscape%20Detail.png)
+![Drawer Actions](https://github.com/Stegnerd/AndroidDex/blob/master/Screenshots/Drawer.png) ![Menu Filter](https://github.com/Stegnerd/AndroidDex/blob/master/Screenshots/Filter.png)
